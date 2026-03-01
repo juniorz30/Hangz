@@ -5,7 +5,7 @@ Hangz - find the spot, skip the stress
 
 Hangz is een interactieve webapplicatie waarmee je snel en eenvoudig leuke hangspots, eetplekken en activiteiten kunt ontdekken in de regio die jij wilt. Klik op de kaart, voeg je favoriete plekken toe en beoordeel ze met sterren. Alles in een stijlvol donker design met oranje accenten.
 
-![Hangz screenshot](C:\Users\junio\Pictures\Screenshots) <!-- Voeg later een screenshot toe -->
+![Hangz screenshot](<img width="1288" height="744" alt="Image" src="https://github.com/user-attachments/assets/9415f5bf-9b18-441e-89c9-d0b1aded853e" />) <!-- Voeg later een screenshot toe -->
 
  ✨ Features
 
