@@ -26,5 +26,4 @@ Hangz is een interactieve webapplicatie waarmee je snel en eenvoudig leuke hangs
 - JavaScript – Volledige functionaliteit, modulaire opzet
 - Leaflet – Interactieve kaart met OpenStreetMap
 - Font Awesome – Iconen
-- Google Fonts – Inter lettertype
 - Supabase (in de toekomst) – Backend en database
