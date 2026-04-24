@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangz - Find the spot. Skip the stress.</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- LOGIN MODAL (eerst zien) -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-card">
+            <div class="login-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <h2>Welkom bij Hangz</h2>
+            <p>Log in of registreer om spots toe te voegen en te beoordelen</p>
+            <input type="text" id="loginUsername" placeholder="Gebruikersnaam">
+            <input type="password" id="loginPassword" placeholder="Wachtwoord">
+            <div class="login-buttons">
+                <button id="doLoginBtn" class="btn-primary">Inloggen</button>
+                <button id="doRegisterBtn" class="btn-secondary">Registreren</button>
+                <button id="guestLoginBtn" class="btn-text">Verder als gast</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-left">
+            <button id="menuToggle" class="icon-btn menu-icon"><i class="fas fa-bars"></i></button>
+            <div class="logo"><i class="fas fa-map-marker-alt"></i><span>Hangz</span></div>
+        </div>
+        <nav class="header-nav">
+            <a href="#" data-view="map" class="nav-link active"><i class="fas fa-map"></i><span>Kaart</span></a>
+            <a href="#" data-view="features" class="nav-link"><i class="fas fa-star"></i><span>Features</span></a>
+            <a href="#" data-view="profile" class="nav-link"><i class="fas fa-user"></i><span>Profiel</span></a>
+        </nav>
+        <div class="header-right">
+            <button id="searchToggleBtn" class="icon-btn"><i class="fas fa-search"></i></button>
+            <span id="userNameDisplay" class="user-name">Gast</span>
+            <button id="logoutHeaderBtn" class="icon-btn logout-icon" style="display: none;"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </header>
+
+    <!-- ZOEKBALK (klapbaar) -->
+    <div id="searchBar" class="search-bar">
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="globalSearchInput" placeholder="Zoek een spot...">
+            <button id="clearSearchBtn" class="clear-btn"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+
+    <!-- SIDEBAR (links) -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo"><i class="fas fa-map-marker-alt"></i><span>Hangz</span></div>
+            <button id="closeSidebarBtn" class="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" data-panel="tutorial" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Tutorial</span></a>
+            <a href="#" data-panel="about" class="sidebar-link"><i class="fas fa-info-circle"></i><span>Over mij</span></a>
+            <a href="#" data-panel="addspot" class="sidebar-link"><i class="fas fa-plus-circle"></i><span>Locatie toevoegen</span></a>
+        </nav>
+        <div class="sidebar-footer">
+            <p>v2.0 - OOP versie</p>
+        </div>
+    </aside>
+
+    <!-- OVERLAY voor sidebar -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- KAART VIEW -->
+        <section id="mapView" class="view active">
+            <div class="filter-bar">
+                <button data-filter="all" class="filter-btn active"><i class="fas fa-th-large"></i><span>Alle</span></button>
+                <button data-filter="park" class="filter-btn"><i class="fas fa-tree"></i><span>Park</span></button>
+                <button data-filter="gym" class="filter-btn"><i class="fas fa-dumbbell"></i><span>Gym</span></button>
+                <button data-filter="restaurant" class="filter-btn"><i class="fas fa-utensils"></i><span>Resto</span></button>
+                <button data-filter="activiteit" class="filter-btn"><i class="fas fa-hiking"></i><span>Activiteit</span></button>
+                <button data-filter="muziekschool" class="filter-btn"><i class="fas fa-music"></i><span>Muziek</span></button>
+                <button data-filter="pedicure" class="filter-btn"><i class="fas fa-spa"></i><span>Pedicure</span></button>
+            </div>
+            <div id="leafletMap" class="map-container"></div>
+            <div id="addHint" class="add-hint"><i class="fas fa-hand-pointer"></i> Klik op de kaart om een spot toe te voegen</div>
+        </section>
+
+        <!-- FEATURES VIEW -->
+        <section id="featuresView" class="view">
+            <div class="features-hero">
+                <h1>Hangz</h1>
+                <p class="slogan">Find the spot. Skip the stress.</p>
+                <p class="sub">Ontdek de beste spots in jouw buurt – Willebroek, Puurs en Mechelen</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card"><i class="fas fa-map-marked-alt"></i><h3>Interactieve Kaart</h3><p>Vind gemakkelijk spots op de kaart, met real-time filters en zoeken.</p></div>
+                <div class="feature-card"><i class="fas fa-star"></i><h3>Beoordelingen</h3><p>Lees reviews van anderen en geef zelf sterren.</p></div>
+                <div class="feature-card"><i class="fas fa-plus-circle"></i><h3>Zelf toevoegen</h3><p>Mis je een topplek? Voeg hem toe voor de community.</p></div>
+                <div class="feature-card"><i class="fas fa-filter"></i><h3>Slimme filters</h3><p>Filter op park, gym, resto, activiteit, muziekschool of pedicure.</p></div>
+                <div class="feature-card"><i class="fas fa-users"></i><h3>Community driven</h3><p>Alle spots worden toegevoegd en beoordeeld door gebruikers zoals jij.</p></div>
+                <div class="feature-card"><i class="fas fa-mobile-alt"></i><h3>Overal beschikbaar</h3><p>Responsive design – werkt op telefoon, tablet en desktop.</p></div>
+            </div>
+            <div class="howto-section">
+                <h2>Hoe werkt Hangz?</h2>
+                <div class="steps">
+                    <div class="step">1</div><p>Ontdek spots op de kaart</p>
+                    <div class="step">2</div><p>Filter op categorie of zoek op naam</p>
+                    <div class="step">3</div><p>Klik op een marker voor details en beoordeling</p>
+                    <div class="step">4</div><p>Voeg zelf een spot toe via de kaart of sidebar</p>
+                </div>
+                <button id="featuresCtaBtn" class="btn-primary">Start nu met Hangz</button>
+            </div>
+        </section>
+
+        <!-- PROFIEL VIEW -->
+        <section id="profileView" class="view">
+            <div class="profile-container">
+                <div class="profile-avatar-big"><i class="fas fa-user-astronaut"></i></div>
+                <h2>Jouw profiel</h2>
+                <div class="profile-card">
+                    <p><strong>Gebruikersnaam:</strong> <span id="profileUsernameLabel">-</span></p>
+                </div>
+                <div class="profile-card">
+                    <h3><i class="fas fa-location-dot"></i> Jouw toegevoegde spots</h3>
+                    <div id="userSpotsList" class="user-spots-list">
+                        <p class="empty">Nog geen spots toegevoegd</p>
+                    </div>
+                </div>
+                <div class="profile-card stats">
+                    <h3><i class="fas fa-chart-line"></i> Statistieken</h3>
+                    <div class="stats-row"><span>Spots toegevoegd:</span> <span id="statUserSpots">0</span></div>
+                    <div class="stats-row"><span>Beoordelingen gegeven:</span> <span id="statUserRatings">0</span></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PANELS (schuif van rechts) -->
+    <div id="tutorialPanel" class="slide-panel">
+        <div class="panel-header"><h3><i class="fas fa-graduation-cap"></i> Tutorial</h3><button class="closePanelBtn"><i class="fas fa-times"></i></button></div>
+        <div class="panel-body">
+            <p><strong>Stap 1:</strong> Bekijk de kaart – alle spots zijn zichtbaar.</p>
+            <p><strong>Stap 2:</strong> Gebruik de filterbalk om categorieën te selecteren.</p>
+            <p><strong>Stap 3:</strong> Klik op een marker voor details en beoordeling.</p>
+            <p><strong>Stap 4:</strong> Klik op de kaart om een nieuwe spot toe te voegen (ingelogd).</p>
+            <p><strong>Stap 5:</strong> Ga naar Profiel om je gebruikersnaam te zien en je eigen spots.</p>
+        </div>
+    </div>
+    <div id="aboutPanel" class="slide-panel">
+        <div class="panel-header"><h3><i class="fas fa-user-secret"></i> Over mij</h3><button class="closePanelBtn"><i class="fas fa-times"></i></button></div>
+        <div class="panel-body">
+            <p>Hangz is een schoolproject voor de opleiding Informatica.</p>
+            <p>Doel: een gebruiksvriendelijke kaart voor hangspots in Willebroek, Puurs en Mechelen.</p>
+            <p>Technologie: HTML/CSS/JS, Leaflet, OOP, localStorage (later Supabase).</p>
+            <p>Gemaakt door: [Jouw Naam]</p>
+        </div>
+    </div>
+    <div id="addSpotPanel" class="slide-panel">
+        <div class="panel-header"><h3><i class="fas fa-plus-circle"></i> Nieuwe spot</h3><button class="closePanelBtn"><i class="fas fa-times"></i></button></div>
+        <div class="panel-body">
+            <form id="addSpotForm">
+                <input type="text" id="spotName" placeholder="Naam *" required>
+                <select id="spotCategory">
+                    <option value="park">Park</option>
+                    <option value="gym">Gym</option>
+                    <option value="restaurant">Restaurant</option>
+                    <option value="activiteit">Activiteit</option>
+                    <option value="muziekschool">Muziekschool</option>
+                    <option value="pedicure">Pedicure</option>
+                </select>
+                <textarea id="spotDesc" placeholder="Beschrijving (optioneel)"></textarea>
+                <div class="location-preview"><i class="fas fa-map-pin"></i> <span id="selectedCoords">Nog geen locatie gekozen</span></div>
+                <div class="form-buttons">
+                    <button type="button" id="cancelAddBtn" class="btn-secondary">Annuleren</button>
+                    <button type="submit" class="btn-primary">Spot toevoegen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SPOT DETAIL MODAL -->
+    <div id="spotModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header"><span id="modalCategoryBadge" class="category-badge">Park</span><button id="closeModalBtn" class="modal-close"><i class="fas fa-times"></i></button></div>
+            <div class="modal-body">
+                <h2 id="modalSpotName">Spot naam</h2>
+                <p id="modalSpotDesc"></p>
+                <div class="rating-area">
+                    <p>Gemiddelde beoordeling:</p>
+                    <div id="modalStarsDisplay" class="stars-display"></div>
+                    <p id="modalRatingText"></p>
+                    <div class="your-rating">
+                        <p>Jouw score:</p>
+                        <div id="starRatingInput" class="star-input">
+                            <i data-val="1" class="far fa-star"></i><i data-val="2" class="far fa-star"></i><i data-val="3" class="far fa-star"></i><i data-val="4" class="far fa-star"></i><i data-val="5" class="far fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p><i class="fas fa-user"></i> Toegevoegd door: <span id="modalAddedBy"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Hangz - Find the spot. Skip the stress.</p>
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
