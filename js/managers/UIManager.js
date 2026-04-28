@@ -17,7 +17,7 @@ export class UIManager {
         this.userNameSpan = document.getElementById('userNameDisplay');
         this.logoutBtn = document.getElementById('logoutHeaderBtn');
         this.addHint = document.getElementById('addHint');
-        // panels
+        // panels (tutorial, about, add spot gwn extra informatie)
         this.panels = {
             tutorial: document.getElementById('tutorialPanel'),
             about: document.getElementById('aboutPanel'),

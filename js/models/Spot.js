@@ -12,17 +12,17 @@ export class Spot extends Location {
 
     constructor(id, name, category, description, lat, lng, addedBy, ratings = [], userRating = null) {
         super(lat, lng);
-        this.#id = id;
+        this.#id = id; // door die this.# slaan we deze variabele op in de klasse, maar kunnen we er niet direct van buitenaf bij, wat veiliger is
         this.#name = name;
         this.#category = category;
         this.#description = description;
         this.#addedBy = addedBy;
-        this.#ratings = ratings;
+        this.#ratings = ratings; // verscil tussen ratings en userRating is dat ratings een array is van alle ratings van alle gebruikers, terwijl userRating alleen de rating van de huidige gebruiker bijhoudt
         this.#userRating = userRating;
     }
 
     // Getters
-    getId() { return this.#id; }
+    getId() { return this.#id; } //
     getName() { return this.#name; }
     getCategory() { return this.#category; }
     getDescription() { return this.#description; }
