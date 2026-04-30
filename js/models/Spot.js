@@ -30,21 +30,20 @@ export class Spot extends Location {
     getRatings() { return [...this.#ratings]; }
     getUserRating() { return this.#userRating; }
 
-    // Berekent gemiddelde met for-loop
+    // Berekent gemiddelde van alle ratings
     getAverageRating() {
         if (this.#ratings.length === 0) return 0;
         let sum = 0;
         for (let i = 0; i < this.#ratings.length; i++) {
-            sum += this.#ratings[i];
+            sum += this.#ratings[i].value; // .value omdat ratings objecten zijn!
         }
         return sum / this.#ratings.length;
     }
 
     // Voeg rating toe (vervangt oude rating van dezelfde gebruiker)
     addRating(rating, username) {
-        // Verwijder eventuele bestaande rating van deze gebruiker
-        const index = this.#ratings.findIndex(r => r.user === username);
-        if (index !== -1) this.#ratings.splice(index, 1);
+        // Verwijder oude rating van deze gebruiker en voeg nieuwe toe
+        this.#ratings = this.#ratings.filter(r => r.user !== username);
         this.#ratings.push({ value: rating, user: username });
         this.#userRating = rating;
     }
