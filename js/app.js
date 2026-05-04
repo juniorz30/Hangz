@@ -55,6 +55,11 @@ class HangzApp {
         const usernameInput = document.getElementById('loginUsername');
         const passwordInput = document.getElementById('loginPassword');
 
+        if (!loginOverlay || !doLogin || !doRegister || !guest) {
+            console.error('Login elements not found!');
+            return;
+        }
+
         const closeLogin = () => {
             loginOverlay.style.display = 'none';
             if (!this.#auth.isLoggedIn()) {
@@ -89,11 +94,15 @@ class HangzApp {
             }
         };
         guest.onclick = () => {
-            this.#auth.login('Gast', '');
-            this.#ui.setLoggedInUser('Gast');
-            this.#ui.showAddHint(false);
-            loginOverlay.style.display = 'none';
-            this.#updateProfileUI();
+            try {
+                this.#auth.login('Gast', '');
+                this.#ui.setLoggedInUser('Gast');
+                this.#ui.showAddHint(false);
+                loginOverlay.style.display = 'none';
+                this.#updateProfileUI();
+            } catch (e) {
+                console.error('Guest login error:', e);
+            }
         };
         loginOverlay.style.display = 'flex';
     }

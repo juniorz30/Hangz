@@ -274,10 +274,12 @@ body {
 #mapView {
     position: relative;
     height: calc(100vh - 68px);
+    display: flex;
+    flex-direction: column;
 }
 
 .map-container {
-    height: 100%;
+    flex: 1;
     width: 100%;
     background: #1a1e26;
 }
