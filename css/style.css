@@ -544,6 +544,22 @@ body {
     cursor: pointer;
 }
 
+.btn-text {
+    background: none;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 40px;
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.btn-text:hover {
+    background: var(--bg-sidebar);
+    color: white;
+}
+
 .login-overlay {
     position: fixed;
     inset: 0;
@@ -580,9 +596,76 @@ body {
     margin-top: 20px;
 }
 
+/* ===== VERBERG SIDEBAR & HAMBURGER MENU ===== */
+/* Dit zorgt ervoor dat het hamburger menu en sidebar niet zichtbaar zijn */
+.menu-icon {
+    display: none !important;
+}
+
+.sidebar {
+    display: none !important;
+}
+
+/* ===== EXTRA SECTION STYLING ===== */
+/* Styling voor Tutorial, Over Hangz content secties */
+.info-section {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 28px;
+    margin: 24px auto;
+    max-width: 800px;
+    border: 1px solid var(--border);
+}
+
+.info-section h2 {
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+}
+
+.info-section h2 i {
+    font-size: 28px;
+}
+
+.info-section p {
+    margin-bottom: 12px;
+    line-height: 1.7;
+    color: var(--text-light);
+}
+
+.info-section p strong {
+    color: var(--accent);
+}
+
+/* ===== PROFIEL STATUS KAARTEN ===== */
+/* Laat zien of je gast bent of ingelogd als gebruiker */
+.status-card {
+    background: linear-gradient(135deg, #ff7b2c22 0%, #ff7b2c11 100%);
+    border: 1px solid #ff7b2c44;
+}
+
+.status-card p {
+    margin: 8px 0;
+}
+
+.status-card i {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.small-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 12px !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .header-nav span { display: none; }
     .features-grid { grid-template-columns: 1fr; }
+    .extra-section { grid-template-columns: 1fr; }
     .slide-panel { max-width: 100%; }
 }

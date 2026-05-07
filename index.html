@@ -17,12 +17,11 @@
         <div class="login-card">
             <div class="login-icon"><i class="fas fa-map-marker-alt"></i></div>
             <h2>Welkom bij Hangz</h2>
-            <p>Log in of registreer om spots toe te voegen en te beoordelen</p>
+            <p>Voer een gebruikersnaam in om spots toe te voegen en te beoordelen</p>
             <input type="text" id="loginUsername" placeholder="Gebruikersnaam">
-            <input type="password" id="loginPassword" placeholder="Wachtwoord">
+            <input type="password" id="loginPassword" placeholder="Wachtwoord" style="display: none;">
             <div class="login-buttons">
-                <button id="doLoginBtn" class="btn-primary">Inloggen</button>
-                <button id="doRegisterBtn" class="btn-secondary">Registreren</button>
+                <button id="doRegisterBtn" class="btn-primary">Doorgaan</button>
                 <button id="guestLoginBtn" class="btn-text">Verder als gast</button>
             </div>
         </div>
@@ -112,9 +111,28 @@
                     <div class="step">1</div><p>Ontdek spots op de kaart</p>
                     <div class="step">2</div><p>Filter op categorie of zoek op naam</p>
                     <div class="step">3</div><p>Klik op een marker voor details en beoordeling</p>
-                    <div class="step">4</div><p>Voeg zelf een spot toe via de kaart of sidebar</p>
+                    <div class="step">4</div><p>Voeg zelf een spot toe via de kaart</p>
                 </div>
                 <button id="featuresCtaBtn" class="btn-primary">Start nu met Hangz</button>
+            </div>
+            
+            <!-- TUTORIAL SECTIE -->
+            <div class="info-section">
+                <h2><i class="fas fa-graduation-cap"></i> Tutorial</h2>
+                <p><strong>Stap 1:</strong> Bekijk de kaart – alle spots zijn zichtbaar.</p>
+                <p><strong>Stap 2:</strong> Gebruik de filterbalk om categorieën te selecteren.</p>
+                <p><strong>Stap 3:</strong> Klik op een marker voor details en beoordeling.</p>
+                <p><strong>Stap 4:</strong> Klik op de kaart om een nieuwe spot toe te voegen (ingelogd).</p>
+                <p><strong>Stap 5:</strong> Ga naar Profiel om je gebruikersnaam te zien en je eigen spots.</p>
+            </div>
+
+            <!-- OVER HANGZ SECTIE -->
+            <div class="info-section">
+                <h2><i class="fas fa-info-circle"></i> Over Hangz</h2>
+                <p>Hangz is een schoolproject voor de opleiding Informatica.</p>
+                <p><strong>Doel:</strong> Een gebruiksvriendelijke kaart voor hangspots in Willebroek, Puurs en Mechelen.</p>
+                <p><strong>Technologie:</strong> HTML/CSS/JS, Leaflet, OOP, localStorage (later Supabase).</p>
+                <p><strong>Gemaakt door:</strong> [Jouw Naam]</p>
             </div>
         </section>
 
@@ -123,6 +141,19 @@
             <div class="profile-container">
                 <div class="profile-avatar-big"><i class="fas fa-user-astronaut"></i></div>
                 <h2>Jouw profiel</h2>
+                
+                <!-- STATUS KAART: GAST OF INGELOGD -->
+                <div class="profile-card status-card">
+                    <div id="guestStatusBox" style="display: none;">
+                        <p><i class="fas fa-user-slash"></i> <strong>Je bent ingelogd als gast</strong></p>
+                        <p class="small-text">Log in om je eigen spots op te slaan en te beheren.</p>
+                    </div>
+                    <div id="userStatusBox" style="display: none;">
+                        <p><i class="fas fa-check-circle"></i> <strong>Gebruiker:</strong> <span id="profileUserEmail">-</span></p>
+                        <p class="small-text">Je bent ingelogd en kunt spots toevoegen.</p>
+                    </div>
+                </div>
+                
                 <div class="profile-card">
                     <p><strong>Gebruikersnaam:</strong> <span id="profileUsernameLabel">-</span></p>
                 </div>
@@ -136,6 +167,25 @@
                     <h3><i class="fas fa-chart-line"></i> Statistieken</h3>
                     <div class="stats-row"><span>Spots toegevoegd:</span> <span id="statUserSpots">0</span></div>
                     <div class="stats-row"><span>Beoordelingen gegeven:</span> <span id="statUserRatings">0</span></div>
+                </div>
+
+                <!-- TUTORIAL SECTIE IN PROFIEL -->
+                <div class="info-section">
+                    <h2><i class="fas fa-graduation-cap"></i> Tutorial</h2>
+                    <p><strong>Stap 1:</strong> Bekijk de kaart – alle spots zijn zichtbaar.</p>
+                    <p><strong>Stap 2:</strong> Gebruik de filterbalk om categorieën te selecteren.</p>
+                    <p><strong>Stap 3:</strong> Klik op een marker voor details en beoordeling.</p>
+                    <p><strong>Stap 4:</strong> Klik op de kaart om een nieuwe spot toe te voegen (ingelogd).</p>
+                    <p><strong>Stap 5:</strong> Ga naar Profiel om je gebruikersnaam te zien en je eigen spots.</p>
+                </div>
+
+                <!-- OVER HANGZ SECTIE IN PROFIEL -->
+                <div class="info-section">
+                    <h2><i class="fas fa-info-circle"></i> Over Hangz</h2>
+                    <p>Hangz is een schoolproject voor de opleiding Informatica.</p>
+                    <p><strong>Doel:</strong> Een gebruiksvriendelijke kaart voor hangspots in Willebroek, Puurs en Mechelen.</p>
+                    <p><strong>Technologie:</strong> HTML/CSS/JS, Leaflet, OOP, localStorage (later Supabase).</p>
+                    <p><strong>Gemaakt door:</strong> [Jouw Naam]</p>
                 </div>
             </div>
         </section>

@@ -46,6 +46,10 @@ export class UIManager {
         this.userSpotsListDiv = document.getElementById('userSpotsList');
         this.statUserSpots = document.getElementById('statUserSpots');
         this.statUserRatings = document.getElementById('statUserRatings');
+        // NIEUWE ELEMENTEN: Gast/Ingelogd status
+        this.guestStatusBox = document.getElementById('guestStatusBox');
+        this.userStatusBox = document.getElementById('userStatusBox');
+        this.profileUserEmail = document.getElementById('profileUserEmail');
     }
 
     // Toon/verberg sidebar
@@ -125,6 +129,19 @@ export class UIManager {
 
     // Update profiel info
     updateProfileUI(username, userSpots, userRatingsCount) {
+        // GAST of INGELOGD STATUS TONEN
+        if (username === 'Gast') {
+            // Toon de gast status box
+            this.guestStatusBox.style.display = 'block';
+            this.userStatusBox.style.display = 'none';
+        } else {
+            // Toon de ingelogd status box met email/username
+            this.userStatusBox.style.display = 'block';
+            this.guestStatusBox.style.display = 'none';
+            this.profileUserEmail.textContent = username; // Dit kan later je email zijn
+        }
+        
+        // Update de rest van de profiel informatie
         this.profileUsernameLabel.textContent = username;
         this.statUserSpots.textContent = userSpots.length;
         this.statUserRatings.textContent = userRatingsCount;

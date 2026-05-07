@@ -49,61 +49,41 @@ class HangzApp {
 
     #showLoginModal() {
         const loginOverlay = document.getElementById('loginOverlay');
-        const doLogin = document.getElementById('doLoginBtn');
         const doRegister = document.getElementById('doRegisterBtn');
         const guest = document.getElementById('guestLoginBtn');
         const usernameInput = document.getElementById('loginUsername');
-        const passwordInput = document.getElementById('loginPassword');
 
-        if (!loginOverlay || !doLogin || !doRegister || !guest) {
+        if (!loginOverlay || !doRegister || !guest) {
             console.error('Login elements not found!');
             return;
         }
 
-        const closeLogin = () => {
-            loginOverlay.style.display = 'none';
-            if (!this.#auth.isLoggedIn()) {
-                // gast modus
-                this.#auth.login('Gast', '');
-                this.#ui.setLoggedInUser('Gast');
-                this.#ui.showAddHint(false);
-            }
-            this.#updateProfileUI();
-        };
-
-        doLogin.onclick = () => {
+        // DOORGAAN (registreren) BUTTON
+        doRegister.onclick = () => {
             const user = usernameInput.value.trim();
-            const pwd = passwordInput.value;
-            if (this.#auth.login(user, pwd)) {
+            if (!user) {
+                alert('Voer een gebruikersnaam in');
+                return;
+            }
+            if (this.#auth.register(user, '')) {
                 this.#ui.setLoggedInUser(user);
                 this.#ui.showAddHint(true);
                 loginOverlay.style.display = 'none';
                 this.#updateProfileUI();
             } else {
-                alert('Ongeldige gegevens');
+                alert('Registratie mislukt');
             }
         };
-        doRegister.onclick = () => {
-            const user = usernameInput.value.trim();
-            const pwd = passwordInput.value;
-            if (this.#auth.register(user, pwd)) {
-                this.#ui.setLoggedInUser(user);
-                this.#ui.showAddHint(true);
-                loginOverlay.style.display = 'none';
-                this.#updateProfileUI();
-            }
-        };
+
+        // GAST BUTTON
         guest.onclick = () => {
-            try {
-                this.#auth.login('Gast', '');
-                this.#ui.setLoggedInUser('Gast');
-                this.#ui.showAddHint(false);
-                loginOverlay.style.display = 'none';
-                this.#updateProfileUI();
-            } catch (e) {
-                console.error('Guest login error:', e);
-            }
+            this.#auth.login('Gast', '');
+            this.#ui.setLoggedInUser('Gast');
+            this.#ui.showAddHint(false);
+            loginOverlay.style.display = 'none';
+            this.#updateProfileUI();
         };
+
         loginOverlay.style.display = 'flex';
     }
 
