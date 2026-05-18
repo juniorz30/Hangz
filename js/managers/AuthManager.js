@@ -32,4 +32,10 @@ export class AuthManager {
     isLoggedIn() {
         return this.#currentUser !== null;
     }
+
+    // Controleer of de gebruiker een gast is (geen echte account)
+    // Dit is dé plek waar we bepalen wat een gast is - nooit meer elders doen!
+    isGuest() {
+        return this.#currentUser === null || this.#currentUser === 'Gast';
+    }
 }

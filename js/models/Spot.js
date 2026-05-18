@@ -31,11 +31,15 @@ export class Spot extends Location {
     getUserRating() { return this.#userRating; }
 
     // Berekent gemiddelde van alle ratings
+    // NOTE: ratings kunnen getallen zijn (5, 4) OF objecten ({ value: 5, user: 'Jan' })
+    // Dit gebeurde omdat seed-data getallen heeft, maar addRating() objecten maakt.
     getAverageRating() {
         if (this.#ratings.length === 0) return 0;
         let sum = 0;
         for (let i = 0; i < this.#ratings.length; i++) {
-            sum += this.#ratings[i].value; // .value omdat ratings objecten zijn!
+            const r = this.#ratings[i];
+            // Als het een getal is, use het direct; anders pak .value
+            sum += (typeof r === 'number') ? r : r.value;
         }
         return sum / this.#ratings.length;
     }

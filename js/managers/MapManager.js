@@ -1,4 +1,6 @@
 // managers/MapManager.js
+import { CATEGORY_ICONS, CATEGORY_COLORS, DEFAULT_ICON, DEFAULT_COLOR } from '../utils/constants.js';
+
 export class MapManager {
     #map;
     #markers = [];      // Array van Leaflet marker objects
@@ -67,27 +69,13 @@ export class MapManager {
     }
 
     #getCategoryColor(category) {
-        const colors = {
-            park: '#2ecc71',
-            gym: '#3498db',
-            restaurant: '#e67e22',
-            activiteit: '#9b59b6',
-            muziekschool: '#e91e63',
-            pedicure: '#1abc9c'
-        };
-        return colors[category] || '#ff7b2c';
+        // Pak de kleur uit constants.js, of gebruik DEFAULT_COLOR
+        return CATEGORY_COLORS[category] || DEFAULT_COLOR;
     }
 
     #getIconClass(category) {
-        const icons = {
-            park: 'fa-tree',
-            gym: 'fa-dumbbell',
-            restaurant: 'fa-utensils',
-            activiteit: 'fa-hiking',
-            muziekschool: 'fa-music',
-            pedicure: 'fa-spa'
-        };
-        return icons[category] || 'fa-map-marker-alt';
+        // Pak het icoon uit constants.js, of gebruik DEFAULT_ICON
+        return CATEGORY_ICONS[category] || DEFAULT_ICON;
     }
 
     // Voeg een nieuwe marker toe (zonder hele hertekening)

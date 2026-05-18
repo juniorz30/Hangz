@@ -142,16 +142,16 @@ class HangzApp {
         this.#ui.closePanelBtns.forEach(btn => {
             btn.onclick = () => this.#ui.closeAllPanels();
         });
-        // Kaart klik (alleen als ingelogd)
+        // Kaart klik (alleen als niet-gast)
         this.#mapManager.onMapClick((e) => {
-            if (this.#auth.isLoggedIn() && this.#auth.getCurrentUser() !== 'Gast') {
-                this.#selectedLocation = e.latlng;
-                this.#ui.setSelectedCoords(e.latlng.lat, e.latlng.lng);
-                this.#ui.openPanel('addspot');
-                this.#ui.showAddHint(false);
-            } else {
-                this.#ui.showNotification('Log eerst in om spots toe te voegen', 'error');
+            if (this.#auth.isGuest()) {
+                this.#ui.showNotification('Log in om spots toe te voegen', 'error');
+                return;
             }
+            this.#selectedLocation = e.latlng;
+            this.#ui.setSelectedCoords(e.latlng.lat, e.latlng.lng);
+            this.#ui.openPanel('addspot');
+            this.#ui.showAddHint(false);
         });
         // Add spot form submit
         this.#ui.addSpotForm.onsubmit = (e) => {
@@ -180,19 +180,9 @@ class HangzApp {
             this.#ui.closeAllPanels();
             this.#selectedLocation = null;
         };
-        // Marker click (via event delegation op map? maar we hebben markers met spotId, en we gebruiken de map click op marker)
-        // We moeten de marker click handler koppelen via MapManager. We overschrijven de marker creatie.
-        // Oplossing: na elke renderMarkers, voeg click handlers toe.
-        this.#mapManager.getMap().on('click', (e) => {
-            // alleen als er op marker geklikt wordt, bubbelt? Leaflet geeft marker click apart.
-        });
-        // We voegen een functie toe in MapManager om markers te voorzien van click callback.
-        // Maar we kunnen ook de bestaande `addMarker` gebruiken. 
-        // Hier een tijdelijke fix: we herschrijven renderMarkers zodat markers ook click hebben.
-        // Laten we een extra methode in MapManager zetten om clicks te binden.
-        // Ik voeg een patch toe: na renderMarkers, zoek alle markers en bind click.
+        // Marker click handler - alleen niet-gasten mogen beoordelen
         this.#mapManager.onMarkerClick = (spot) => {
-            if (!this.#auth.isLoggedIn() && this.#auth.getCurrentUser() === 'Gast') {
+            if (this.#auth.isGuest()) {
                 this.#ui.showNotification('Log in om te beoordelen', 'error');
                 return;
             }

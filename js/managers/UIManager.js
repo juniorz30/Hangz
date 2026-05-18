@@ -1,5 +1,7 @@
 // managers/UIManager.js
 // Behandelt alle DOM updates, panels, modals, notificaties
+import { CATEGORY_ICONS, DEFAULT_ICON } from '../utils/constants.js';
+
 export class UIManager {
     constructor() {
         // DOM elementen referenties
@@ -159,8 +161,8 @@ export class UIManager {
     }
 
     getCategoryIcon(cat) {
-        const icons = { park: 'fa-tree', gym: 'fa-dumbbell', restaurant: 'fa-utensils', activiteit: 'fa-hiking', muziekschool: 'fa-music', pedicure: 'fa-spa' };
-        return icons[cat] || 'fa-location-dot';
+        // Pak het icoon uit constants.js, of gebruik DEFAULT_ICON
+        return CATEGORY_ICONS[cat] || DEFAULT_ICON;
     }
 
     // Modal voor spot details
