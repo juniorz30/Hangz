@@ -16,8 +16,8 @@ class HangzApp {
     #selectedLocation; // {lat, lng}
 
     constructor() {
-        this.#auth = new AuthManager();
         this.#storage = new StorageManager();
+        this.#auth = new AuthManager(this.#storage);
         this.#mapManager = new MapManager();
         this.#ui = new UIManager();
         this.#spots = [];
@@ -31,6 +31,7 @@ class HangzApp {
         // Check login status
         const isLoggedIn = this.#auth.isLoggedIn();
         if (!isLoggedIn) {
+            this.#ui.setLoggedOut();
             this.#showLoginModal();
         } else {
             this.#ui.setLoggedInUser(this.#auth.getCurrentUser());
@@ -127,15 +128,20 @@ class HangzApp {
                 }
             };
         });
+        // Tour button
+        if (this.#ui.tourBtn) {
+            this.#ui.tourBtn.onclick = (e) => {
+                e.preventDefault();
+                this.#ui.openPanel('tutorial');
+            };
+        }
         // Sidebar links (panels)
         document.querySelectorAll('.sidebar-link').forEach(link => {
             link.onclick = (e) => {
                 e.preventDefault();
                 const panel = link.getAttribute('data-panel');
                 this.#ui.closeSidebar();
-                if (panel === 'tutorial') this.#ui.openPanel('tutorial');
-                else if (panel === 'about') this.#ui.openPanel('about');
-                else if (panel === 'addspot') this.#ui.openPanel('addspot');
+                if (panel === 'addspot') this.#ui.openPanel('addspot');
             };
         });
         // Close panel buttons
@@ -160,9 +166,18 @@ class HangzApp {
                 this.#ui.showNotification('Klik eerst op de kaart', 'error');
                 return;
             }
-            const { name, category, description } = this.#ui.getAddSpotFormData();
+            const formData = this.#ui.getAddSpotFormData();
+            if (formData.error) {
+                this.#ui.showNotification(formData.error, 'error');
+                return;
+            }
+            const { name, category, description } = formData;
             if (!name) {
                 this.#ui.showNotification('Naam is verplicht', 'error');
+                return;
+            }
+            if (!category) {
+                this.#ui.showNotification('Categorie is verplicht', 'error');
                 return;
             }
             const newId = generateId();
@@ -211,6 +226,8 @@ class HangzApp {
             this.#ui.showNotification('Uitgelogd');
             this.#refreshMarkers();
             this.#updateProfileUI();
+            // Toon login modal
+            this.#showLoginModal();
         };
         // Features CTA
         const cta = document.getElementById('featuresCtaBtn');
@@ -232,4 +249,5 @@ class HangzApp {
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new HangzApp();
     window.app.init();
+    console.log(window.app);
 });

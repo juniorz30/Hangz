@@ -2,8 +2,10 @@
 // Verantwoordelijk voor login/registratie en gebruikerssessie
 export class AuthManager {
     #currentUser;
+    #storageManager;
 
-    constructor() {
+    constructor(storageManager) {
+        this.#storageManager = storageManager;
         const stored = localStorage.getItem('hangz_user');
         this.#currentUser = stored || null;
     }
@@ -23,6 +25,10 @@ export class AuthManager {
     logout() {
         this.#currentUser = null;
         localStorage.removeItem('hangz_user');
+        // Verwijder alle gebruikersgerelateerde data zodat de volgende gebruiker met schone data begint
+        if (this.#storageManager) {
+            this.#storageManager.clearAllUserData();
+        }
     }
 
     getCurrentUser() {

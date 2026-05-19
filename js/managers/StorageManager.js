@@ -56,4 +56,9 @@ export class StorageManager {
             new Spot(7, 'Pedicure Sophia', 'pedicure', 'Professionele pedicurepraktijk.', 51.0590, 4.3560, 'HangzDemo', [5,5,5], null)
         ];
     }
+
+    // Verwijder alle gebruikersgerelateerde data uit localStorage
+    clearAllUserData() {
+        localStorage.removeItem('hangz_spots');
+    }
 }

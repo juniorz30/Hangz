@@ -14,12 +14,14 @@ export class UIManager {
         this.clearSearchBtn = document.getElementById('clearSearchBtn');
         this.globalSearchInput = document.getElementById('globalSearchInput');
         this.navLinks = document.querySelectorAll('.nav-link');
+        this.tourBtn = document.getElementById('tourBtn');
         this.views = document.querySelectorAll('.view');
         this.filterBtns = document.querySelectorAll('.filter-btn');
         this.userNameSpan = document.getElementById('userNameDisplay');
         this.logoutBtn = document.getElementById('logoutHeaderBtn');
         this.addHint = document.getElementById('addHint');
-        // panels (tutorial, about, add spot gwn extra informatie)
+        this.addSpotSidebarLink = document.getElementById('addSpotSidebarLink');
+        // panels
         this.panels = {
             tutorial: document.getElementById('tutorialPanel'),
             about: document.getElementById('aboutPanel'),
@@ -30,9 +32,22 @@ export class UIManager {
         this.addSpotForm = document.getElementById('addSpotForm');
         this.spotNameInput = document.getElementById('spotName');
         this.spotCategorySelect = document.getElementById('spotCategory');
+        this.spotCustomCategory = document.getElementById('spotCustomCategory');
         this.spotDescInput = document.getElementById('spotDesc');
         this.selectedCoordsSpan = document.getElementById('selectedCoords');
         this.cancelAddBtn = document.getElementById('cancelAddBtn');
+        
+        // Event listener voor custom category
+        if (this.spotCategorySelect) {
+            this.spotCategorySelect.addEventListener('change', (e) => {
+                if (e.target.value === 'custom') {
+                    this.spotCustomCategory.style.display = 'block';
+                    this.spotCustomCategory.focus();
+                } else {
+                    this.spotCustomCategory.style.display = 'none';
+                }
+            });
+        }
         // modal
         this.spotModal = document.getElementById('spotModal');
         this.closeModalBtn = document.getElementById('closeModalBtn');
@@ -48,7 +63,7 @@ export class UIManager {
         this.userSpotsListDiv = document.getElementById('userSpotsList');
         this.statUserSpots = document.getElementById('statUserSpots');
         this.statUserRatings = document.getElementById('statUserRatings');
-        // NIEUWE ELEMENTEN: Gast/Ingelogd status
+        // Gast/Ingelogd status
         this.guestStatusBox = document.getElementById('guestStatusBox');
         this.userStatusBox = document.getElementById('userStatusBox');
         this.profileUserEmail = document.getElementById('profileUserEmail');
@@ -239,22 +254,42 @@ export class UIManager {
         this.addHint.style.display = show ? 'flex' : 'none';
     }
 
-    // Update ingelogde user in header
     setLoggedInUser(username) {
         this.userNameSpan.textContent = username;
         this.logoutBtn.style.display = 'inline-block';
+        // Toon "Locatie toevoegen" in sidebar als je ingelogd bent
+        if (this.addSpotSidebarLink) {
+            this.addSpotSidebarLink.style.display = 'block';
+        }
     }
 
     setLoggedOut() {
         this.userNameSpan.textContent = 'Gast';
         this.logoutBtn.style.display = 'none';
+        // Verberg "Locatie toevoegen" in sidebar als je gast bent
+        if (this.addSpotSidebarLink) {
+            this.addSpotSidebarLink.style.display = 'none';
+        }
     }
 
     // Getters voor form
     getAddSpotFormData() {
+        let category = this.spotCategorySelect.value.trim();
+        // Als custom categorie gekozen, gebruik dan de tekst uit het custom input veld
+        if (category === 'custom') {
+            category = this.spotCustomCategory.value.trim();
+            if (!category) {
+                return {
+                    name: '',
+                    category: '',
+                    description: '',
+                    error: 'Voer een categorie in'
+                };
+            }
+        }
         return {
             name: this.spotNameInput.value.trim(),
-            category: this.spotCategorySelect.value,
+            category: category,
             description: this.spotDescInput.value.trim()
         };
     }
