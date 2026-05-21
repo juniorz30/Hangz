@@ -88,7 +88,7 @@ export class StorageManager {
             new Spot(39, 'Klooster Park', 'park', 'Historisch park rond oud klooster.', 51.0460, 4.2730, 'HangzDemo', [4,4,5], null),
             new Spot(40, 'Bibliotheek Zuid Puurs', 'bibliotheek', 'Bibliotheekvestiging op het zuiden van Puurs.', 51.0370, 4.2760, 'HangzDemo', [4,4,4], null),
 
-            // ===== MECHELEN (20 spots) =====
+            // MECHELEN (20 spots) 
             new Spot(41, 'Vrijbroekpark', 'park', 'Prachtig park met dierenweide en wandelpaden.', 51.0259, 4.4775, 'HangzDemo', [5,4,5,4,5], null),
             new Spot(42, 'Dierentuin Mechelen', 'activiteit', 'Mooie dierentuin met diverse dieren.', 51.0245, 4.4800, 'HangzDemo', [5,4,5], null),
             new Spot(43, 'Sint-Romboutskathedraal', 'museum', 'Indrukwekkende gotische kathedraal en museum.', 51.0290, 4.4760, 'HangzDemo', [5,5,5,5], null),
