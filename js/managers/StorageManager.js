@@ -95,20 +95,20 @@ export class StorageManager {
             new Spot(44, 'Station Mechelen', 'station', 'Centraal treinstation met verbindingen overal heen.', 51.0320, 4.4770, 'HangzDemo', [4,4,4], null),
             new Spot(45, 'Delhaize Centrum Mechelen', 'supermarkt', 'Supermarkt in het centrum van Mechelen.', 51.0285, 4.4780, 'HangzDemo', [4,4,4,5], null),
             new Spot(46, 'Aldi Mechelen', 'supermarkt', 'Budget supermarkt met breed assortiment.', 51.0310, 4.4750, 'HangzDemo', [4,4,4], null),
-            new Restaurant(47, 'Restaurant Den Jonghe', 'Belgische topkeuken in het hartje van Mechelen.', 51.0295, 4.4765, 'HangzDemo', [5,5,5], null, 'Belgisch'),
+            new Spot(47, 'Ici Paris', 'winkel', 'Beautywinkels met cosmetica en verzorgingsproducten.', 51.0295, 4.4765, 'HangzDemo', [5,5,5], null),
             new Spot(48, 'Bibliotheek Mechelen', 'bibliotheek', 'Moderne bibliotheek met leeszaal en computers.', 51.0305, 4.4755, 'HangzDemo', [5,4,5], null),
-            new Spot(49, 'Café De Oude Tuin', 'koffie', 'Oud-Mechelse koffiebar met terras.', 51.0280, 4.4790, 'HangzDemo', [4,5,4], null),
-            new Spot(50, 'Busleytonpark', 'park', 'Groot stadspark met speelweide.', 51.0340, 4.4730, 'HangzDemo', [4,4,4,5], null),
+            new Spot(49, 'Inno', 'winkel', 'Trendsetters winkel met kleding en lifestyle.', 51.0280, 4.4790, 'HangzDemo', [4,5,4], null),
+            new Spot(50, 'C&A', 'winkel', 'Kledingwinkel met mode voor heel het gezin.', 51.0340, 4.4730, 'HangzDemo', [4,4,4,5], null),
             new Gym(51, 'Basic Fit Mechelen', 'Fitness center met uitgebreide apparatuur.', 51.0300, 4.4800, 'HangzDemo', [4,4,5], null, true),
             new Spot(52, 'Museum Het Begijnhof', 'museum', 'Historisch begijnhof met museale functie.', 51.0325, 4.4710, 'HangzDemo', [5,4,5], null),
-            new Spot(53, 'Snipes', 'winkel', 'Sportwinkels met sportkleding en schoenen.', 51.0275, 4.4740, 'HangzDemo', [4,5,4], null),
-            new Spot(54, 'Holland & Berret', 'winkel', 'Gezondheids- en voedingssupplementenwinkel.', 51.0295, 4.4775, 'HangzDemo', [5,4,5], null),
+            new Spot(53, 'H&M', 'winkel', 'Modewinkels met sportkleding en jeugdkleding.', 51.0275, 4.4740, 'HangzDemo', [4,5,4], null),
+            new Spot(54, 'Hema', 'winkel', 'Huis- en keukengerei met praktische huishoudartikelen.', 51.0295, 4.4775, 'HangzDemo', [5,4,5], null),
             new Spot(55, 'Carrefour Mechelen', 'supermarkt', 'Hypermarkt met groot assortiment.', 51.0310, 4.4785, 'HangzDemo', [4,4,4], null),
             new Restaurant(56, 'Otacos', 'Vers bereide taco\'s en burrito\'s.', 51.0285, 4.4765, 'HangzDemo', [5,5,5], null, 'Mexicaans'),
             new Restaurant(57, 'Belchicken', 'Knapperige gebakken kip en sides.', 51.0300, 4.4745, 'HangzDemo', [4,4,4], null, 'Belgisch'),
             new Spot(58, 'Groenpark Mechelen', 'park', 'Groen oasis in het centrum van Mechelen.', 51.0350, 4.4760, 'HangzDemo', [4,4,5], null),
             new Restaurant(59, 'Pokebowl Mechelen', 'Verse Hawaiian poke bowls met diverse toppings.', 51.0320, 4.4800, 'HangzDemo', [5,4,5], null, 'Hawaïaans'),
-            new Spot(60, 'Paardenmarkt Mechelen', 'activiteit', 'Historisch marktplein met evenementen.', 51.0275, 4.4755, 'HangzDemo', [5,4,5], null)
+            new Spot(60, 'De Margriet', 'winkel', 'Biologische supermarkt met gezonde producten.', 51.0275, 4.4755, 'HangzDemo', [5,4,5], null)
         ];
     }
 
