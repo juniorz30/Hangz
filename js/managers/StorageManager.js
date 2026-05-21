@@ -66,7 +66,7 @@ export class StorageManager {
             new Spot(19, 'Plan C', 'koffie', 'Hippe bar met gezellige sfeer en drinken.', 51.0560, 4.3550, 'HangzDemo', [4,4,4], null),
             new Spot(20, 'VTS', 'activiteit', 'Professionele sportzaal met diverse trainingsmogelijkheden.', 51.0670, 4.3520, 'HangzDemo', [4,4,4,5], null),
 
-            // ===== PUURS (20 spots) =====
+            //PUURS (20 spots)
             new Spot(21, 'Centraal Park Puurs', 'park', 'Mooi park in het centrum met groen en bankjes.', 51.0410, 4.2720, 'HangzDemo', [4,4,5], null),
             new Spot(22, 'Station Puurs', 'station', 'Treinstation met directe verbinding naar Antwerpen.', 51.0380, 4.2750, 'HangzDemo', [4,4,4], null),
             new Spot(23, 'Delhaize Puurs', 'supermarkt', 'Supermarkt met compleet assortiment.', 51.0420, 4.2730, 'HangzDemo', [4,4,4,5], null),
