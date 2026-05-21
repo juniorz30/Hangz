@@ -8,7 +8,13 @@ export const CATEGORY_ICONS = {
     restaurant: 'fa-utensils',
     activiteit: 'fa-hiking',
     muziekschool: 'fa-music',
-    pedicure: 'fa-spa'
+    pedicure: 'fa-spa',
+    winkel: 'fa-shopping-bag',
+    bibliotheek: 'fa-book',
+    station: 'fa-train',
+    supermarkt: 'fa-shopping-cart',
+    museum: 'fa-landmark',
+    koffie: 'fa-coffee'
 };
 
 // Kleuren voor elke categorie (hex waarden)
@@ -18,7 +24,13 @@ export const CATEGORY_COLORS = {
     restaurant: '#e67e22',
     activiteit: '#9b59b6',
     muziekschool: '#e91e63',
-    pedicure: '#1abc9c'
+    pedicure: '#1abc9c',
+    winkel: '#f39c12',
+    bibliotheek: '#9b59b6',
+    station: '#34495e',
+    supermarkt: '#e74c3c',
+    museum: '#8e44ad',
+    koffie: '#c0392b'
 };
 
 // Default icoon/kleur als categorie onbekend is
