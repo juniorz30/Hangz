@@ -102,6 +102,7 @@ class HangzApp {
         this.#ui.searchToggle.onclick = () => this.#ui.toggleSearchBar();
         this.#ui.clearSearchBtn.onclick = () => {
             document.getElementById('globalSearchInput').value = '';
+            this.#ui.toggleSearchBar(false);//sluit de zoekbalk
             this.#refreshMarkers();
         };
         this.#ui.globalSearchInput.oninput = () => this.#refreshMarkers();
