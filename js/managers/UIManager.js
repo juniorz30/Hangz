@@ -58,6 +58,10 @@ export class UIManager {
         this.modalRatingText = document.getElementById('modalRatingText');
         this.modalAddedBy = document.getElementById('modalAddedBy');
         this.starRatingInput = document.getElementById('starRatingInput');
+        // Close button event listener
+        if (this.closeModalBtn) {
+            this.closeModalBtn.addEventListener('click', () => this.closeSpotModal());
+        }
         // profile
         this.profileUsernameLabel = document.getElementById('profileUsernameLabel');
         this.userSpotsListDiv = document.getElementById('userSpotsList');
@@ -183,7 +187,9 @@ export class UIManager {
     // Modal voor spot details
     openSpotModal(spot, currentUserRating, onRatingCallback) {
         this.modalCategoryBadge.textContent = spot.getCategory();
-        this.modalSpotName.textContent = spot.getName();
+        // Maak spot naam een link naar Google Maps
+        const mapsUrl = `https://maps.google.com/?q=${spot.getLat()},${spot.getLng()}`;
+        this.modalSpotName.innerHTML = `<a href="${mapsUrl}" target="_blank" style="color: inherit; text-decoration: none;">${spot.getName()}</a>`;
         this.modalSpotDesc.textContent = spot.getDescription();
         this.modalAddedBy.textContent = spot.getAddedBy();
         const avg = spot.getAverageRating();

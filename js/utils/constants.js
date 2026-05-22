@@ -11,7 +11,6 @@ export const CATEGORY_ICONS = {
     pedicure: 'fa-spa',
     winkel: 'fa-shopping-bag',
     bibliotheek: 'fa-book',
-    station: 'fa-train',
     supermarkt: 'fa-shopping-cart',
     museum: 'fa-landmark',
     koffie: 'fa-coffee'
@@ -27,7 +26,6 @@ export const CATEGORY_COLORS = {
     pedicure: '#1abc9c',
     winkel: '#f39c12',
     bibliotheek: '#9b59b6',
-    station: '#34495e',
     supermarkt: '#e74c3c',
     museum: '#8e44ad',
     koffie: '#c0392b'
