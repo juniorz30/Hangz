@@ -16,14 +16,14 @@ export const CATEGORY_ICONS = {
     koffie: 'fa-coffee'
 };
 
-// Kleuren voor elke categorie (hex waarden)
+// Kleuren voor elke categorie (hex waarden) - MOETEN OVEREENKOMEN MET CSS!
 export const CATEGORY_COLORS = {
-    park: '#2ecc71',
-    gym: '#3498db',
-    restaurant: '#e67e22',
-    activiteit: '#9b59b6',
-    muziekschool: '#e91e63',
-    pedicure: '#1abc9c',
+    park: '#10b981',
+    gym: '#3b82f6',
+    restaurant: '#f97316',
+    activiteit: '#a855f7',
+    muziekschool: '#ec4899',
+    pedicure: '#eab308',
     winkel: '#f39c12',
     bibliotheek: '#9b59b6',
     supermarkt: '#e74c3c',
