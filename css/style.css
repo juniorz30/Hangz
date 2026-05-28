@@ -6,6 +6,13 @@
     --text-light: #eef2ff;
     --text-muted: #8b92a8;
     --border: #232632;
+    /* Categorie kleuren */
+    --cat-park: #10b981;
+    --cat-gym: #3b82f6;
+    --cat-restaurant: #f97316;
+    --cat-activiteit: #a855f7;
+    --cat-muziek: #ec4899;
+    --cat-pedicure: #eab308;
 }
 
 * {
@@ -269,6 +276,25 @@ body {
     background: #2a2e3a;
     color: white;
 }
+
+/* Categorie kleuren voor filter buttons */
+.filter-btn[data-filter="park"] { color: var(--cat-park); }
+.filter-btn[data-filter="park"].active { background: var(--cat-park); color: white; }
+
+.filter-btn[data-filter="gym"] { color: var(--cat-gym); }
+.filter-btn[data-filter="gym"].active { background: var(--cat-gym); color: white; }
+
+.filter-btn[data-filter="restaurant"] { color: var(--cat-restaurant); }
+.filter-btn[data-filter="restaurant"].active { background: var(--cat-restaurant); color: white; }
+
+.filter-btn[data-filter="activiteit"] { color: var(--cat-activiteit); }
+.filter-btn[data-filter="activiteit"].active { background: var(--cat-activiteit); color: white; }
+
+.filter-btn[data-filter="muziekschool"] { color: var(--cat-muziek); }
+.filter-btn[data-filter="muziekschool"].active { background: var(--cat-muziek); color: white; }
+
+.filter-btn[data-filter="pedicure"] { color: var(--cat-pedicure); }
+.filter-btn[data-filter="pedicure"].active { background: var(--cat-pedicure); color: white; }
 
 /* Map */
 #mapView {

@@ -2,14 +2,12 @@
 import { Spot } from './Spot.js';
 
 export class Gym extends Spot {
-    #hasShowers;
-
     constructor(id, name, description, lat, lng, addedBy, ratings, userRating, hasShowers = false) {
         super(id, name, 'gym', description, lat, lng, addedBy, ratings, userRating);
-        this.#hasShowers = hasShowers;
+        this.hasShowers = hasShowers;
     }
 
-    hasShowers() { return this.#hasShowers; }
+    getHasShowers() { return this.hasShowers; }
 
     toJSON() {
         return {
@@ -23,7 +21,7 @@ export class Gym extends Spot {
             addedBy: this.getAddedBy(),
             ratings: this.getRatings(),
             userRating: this.getUserRating(),
-            hasShowers: this.#hasShowers
+            hasShowers: this.hasShowers
         };
     }
 }

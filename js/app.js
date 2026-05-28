@@ -7,48 +7,40 @@ import { Spot } from './models/Spot.js';
 import { generateId } from './utils/helpers.js';
 
 class HangzApp {
-    #auth;
-    #storage;
-    #mapManager;
-    #ui;
-    #spots;          // array van Spot objecten
-    #currentFilter;
-    #selectedLocation; // {lat, lng}
-
     constructor() {
-        this.#storage = new StorageManager();
-        this.#auth = new AuthManager(this.#storage);
-        this.#mapManager = new MapManager();
-        this.#ui = new UIManager();
-        this.#spots = [];
-        this.#currentFilter = 'all';
-        this.#selectedLocation = null;
+        this.storage = new StorageManager();
+        this.auth = new AuthManager(this.storage);
+        this.mapManager = new MapManager();
+        this.ui = new UIManager();
+        this.spots = [];
+        this.currentFilter = 'all';
+        this.selectedLocation = null;
     }
 
-    async init() {
+    init() {
         // Data laden
-        this.#spots = this.#storage.loadSpots();
+        this.spots = this.storage.loadSpots();
         // Check login status
-        const isLoggedIn = this.#auth.isLoggedIn();
+        const isLoggedIn = this.auth.isLoggedIn();
         if (!isLoggedIn) {
-            this.#ui.setLoggedOut();
-            this.#showLoginModal();
+            this.ui.setLoggedOut();
+            this.showLoginModal();
         } else {
-            this.#ui.setLoggedInUser(this.#auth.getCurrentUser());
-            this.#ui.showAddHint(true);
+            this.ui.setLoggedInUser(this.auth.getCurrentUser());
+            this.ui.showAddHint(true);
         }
         // Kaart initialiseren
-        this.#mapManager.init(51.05, 4.38, 12);
-        this.#refreshMarkers();
+        this.mapManager.init(51.05, 4.38, 12);
+        this.refreshMarkers();
         // Event listeners setup
-        this.#setupEventListeners();
+        this.setupEventListeners();
         // Laat profiel zien als die actief is (standaard kaart)
-        this.#ui.switchView('map');
+        this.ui.switchView('map');
         // Update UI voor profiel later
-        this.#updateProfileUI();
+        this.updateProfileUI();
     }
 
-    #showLoginModal() {
+    showLoginModal() {
         const loginOverlay = document.getElementById('loginOverlay');
         const doRegister = document.getElementById('doRegisterBtn');
         const guest = document.getElementById('guestLoginBtn');
@@ -60,189 +52,197 @@ class HangzApp {
         }
 
         // DOORGAAN (registreren) BUTTON
-        doRegister.onclick = () => {
+        doRegister.addEventListener('click', () => {
             const user = usernameInput.value.trim();
             if (!user) {
                 alert('Voer een gebruikersnaam in');
                 return;
             }
-            if (this.#auth.register(user, '')) {
-                this.#ui.setLoggedInUser(user);
-                this.#ui.showAddHint(true);
+            if (this.auth.register(user, '')) {
+                this.ui.setLoggedInUser(user);
+                this.ui.showAddHint(true);
                 loginOverlay.style.display = 'none';
-                this.#updateProfileUI();
+                this.updateProfileUI();
             } else {
                 alert('Registratie mislukt');
             }
-        };
+        });
 
         // GAST BUTTON
-        guest.onclick = () => {
-            this.#auth.login('Gast', '');
-            this.#ui.setLoggedInUser('Gast');
-            this.#ui.showAddHint(false);
+        guest.addEventListener('click', () => {
+            this.auth.login('Gast', '');
+            this.ui.setLoggedInUser('Gast');
+            this.ui.showAddHint(false);
             loginOverlay.style.display = 'none';
-            this.#updateProfileUI();
-        };
+            this.updateProfileUI();
+        });
 
         loginOverlay.style.display = 'flex';
     }
 
-    #refreshMarkers() {
+    refreshMarkers() {
         const searchValue = document.getElementById('globalSearchInput').value;
-        this.#mapManager.renderMarkers(this.#spots, this.#currentFilter, searchValue);
+        this.mapManager.renderMarkers(this.spots, this.currentFilter, searchValue);
     }
 
-    #setupEventListeners() {
+    setupEventListeners() {
         // Sidebar
-        this.#ui.menuBtn.onclick = () => this.#ui.toggleSidebar(true);
-        this.#ui.closeSidebarBtn.onclick = () => this.#ui.closeSidebar();
-        this.#ui.overlay.onclick = () => this.#ui.closeSidebar();
+        this.ui.menuBtn.addEventListener('click', () => this.ui.openSidebar());
+        this.ui.closeSidebarBtn.addEventListener('click', () => this.ui.closeSidebar());
+        this.ui.overlay.addEventListener('click', () => this.ui.closeSidebar());
         // Search
-        this.#ui.searchToggle.onclick = () => this.#ui.toggleSearchBar();
-        this.#ui.clearSearchBtn.onclick = () => {
+        this.ui.searchToggle.addEventListener('click', () => this.ui.openSearchBar());
+        this.ui.clearSearchBtn.addEventListener('click', () => {
             document.getElementById('globalSearchInput').value = '';
-            this.#ui.toggleSearchBar(false);//sluit de zoekbalk
-            this.#refreshMarkers();
-        };
-        this.#ui.globalSearchInput.oninput = () => this.#refreshMarkers();
+            this.ui.closeSearchBar();
+            this.refreshMarkers();
+        });
+        this.ui.globalSearchInput.addEventListener('input', () => this.refreshMarkers());
         // Filter buttons
-        this.#ui.filterBtns.forEach(btn => {
-            btn.onclick = () => {
-                this.#ui.filterBtns.forEach(b => b.classList.remove('active'));
+        this.ui.filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.ui.filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                this.#currentFilter = btn.getAttribute('data-filter');
-                this.#refreshMarkers();
-            };
+                this.currentFilter = btn.getAttribute('data-filter');
+                this.refreshMarkers();
+            });
         });
         // Navigatie
-        this.#ui.navLinks.forEach(link => {
-            link.onclick = (e) => {
+        this.ui.navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const view = link.getAttribute('data-view');
-                this.#ui.switchView(view);
+                this.ui.switchView(view);
                 if (view === 'map') {
-                    this.#mapManager.invalidateSize();
-                    this.#refreshMarkers();
+                    this.mapManager.invalidateSize();
+                    this.refreshMarkers();
                 } else if (view === 'profile') {
-                    this.#updateProfileUI();
+                    this.updateProfileUI();
                 }
             };
         });
         // Tour button
-        if (this.#ui.tourBtn) {
-            this.#ui.tourBtn.onclick = (e) => {
+        if (this.ui.tourBtn) {
+            this.ui.tourBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                this.#ui.openPanel('tutorial');
-            };
+                this.ui.openPanel('tutorial');
+            });
+        }
+        // My Spots button
+        if (this.ui.mySpotsBtn) {
+            this.ui.mySpotsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.updateMySpotsPanel();
+                this.ui.openPanel('myspots');
+            });
         }
         // Sidebar links (panels)
         document.querySelectorAll('.sidebar-link').forEach(link => {
-            link.onclick = (e) => {
+            link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const panel = link.getAttribute('data-panel');
-                this.#ui.closeSidebar();
-                if (panel === 'addspot') this.#ui.openPanel('addspot');
-            };
+                this.ui.closeSidebar();
+                if (panel === 'addspot') this.ui.openPanel('addspot');
+            });
         });
         // Close panel buttons
-        this.#ui.closePanelBtns.forEach(btn => {
-            btn.onclick = () => this.#ui.closeAllPanels();
+        this.ui.closePanelBtns.forEach(btn => {
+            btn.addEventListener('click', () => this.ui.closeAllPanels());
         });
         // Kaart klik (alleen als niet-gast)
-        this.#mapManager.onMapClick((e) => {
-            if (this.#auth.isGuest()) {
-                this.#ui.showNotification('Log in om spots toe te voegen', 'error');
+        this.mapManager.onMapClick((e) => {
+            if (this.auth.isGuest()) {
+                this.ui.showNotification('Log in om spots toe te voegen', 'error');
                 return;
             }
-            this.#selectedLocation = e.latlng;
-            this.#ui.setSelectedCoords(e.latlng.lat, e.latlng.lng);
-            this.#ui.openPanel('addspot');
-            this.#ui.showAddHint(false);
+            this.selectedLocation = e.latlng;
+            this.ui.setSelectedCoords(e.latlng.lat, e.latlng.lng);
+            this.ui.openPanel('addspot');
+            this.ui.showAddHint(false);
         });
         // Add spot form submit
-        this.#ui.addSpotForm.onsubmit = (e) => {
+        this.ui.addSpotForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            if (!this.#selectedLocation) {
-                this.#ui.showNotification('Klik eerst op de kaart', 'error');
+            if (!this.selectedLocation) {
+                this.ui.showNotification('Klik eerst op de kaart', 'error');
                 return;
             }
-            const formData = this.#ui.getAddSpotFormData();
+            const formData = this.ui.getAddSpotFormData();
             if (formData.error) {
-                this.#ui.showNotification(formData.error, 'error');
+                this.ui.showNotification(formData.error, 'error');
                 return;
             }
             const { name, category, description } = formData;
             if (!name) {
-                this.#ui.showNotification('Naam is verplicht', 'error');
+                this.ui.showNotification('Naam is verplicht', 'error');
                 return;
             }
             if (!category) {
-                this.#ui.showNotification('Categorie is verplicht', 'error');
+                this.ui.showNotification('Categorie is verplicht', 'error');
                 return;
             }
             const newId = generateId();
-            const newSpot = new Spot(newId, name, category, description || 'Geen beschrijving', this.#selectedLocation.lat, this.#selectedLocation.lng, this.#auth.getCurrentUser(), [], null);
-            this.#spots.push(newSpot);
-            this.#storage.saveSpots(this.#spots);
-            this.#refreshMarkers();
-            this.#ui.closeAllPanels();
-            this.#ui.resetAddSpotForm();
-            this.#selectedLocation = null;
-            this.#ui.showNotification('Spot toegevoegd!');
-            this.#updateProfileUI();
-        };
-        this.#ui.cancelAddBtn.onclick = () => {
-            this.#ui.closeAllPanels();
-            this.#selectedLocation = null;
-        };
+            const newSpot = new Spot(newId, name, category, description || 'Geen beschrijving', this.selectedLocation.lat, this.selectedLocation.lng, this.auth.getCurrentUser(), [], null);
+            this.spots.push(newSpot);
+            this.storage.saveSpots(this.spots);
+            this.refreshMarkers();
+            this.ui.closeAllPanels();
+            this.ui.resetAddSpotForm();
+            this.selectedLocation = null;
+            this.ui.showNotification('Spot toegevoegd!');
+            this.updateProfileUI();
+        });
+        this.ui.cancelAddBtn.addEventListener('click', () => {
+            this.ui.closeAllPanels();
+            this.selectedLocation = null;
+        });
         // Marker click handler - alleen niet-gasten mogen beoordelen
-        this.#mapManager.onMarkerClick = (spot) => {
-            if (this.#auth.isGuest()) {
-                this.#ui.showNotification('Log in om te beoordelen', 'error');
+        this.mapManager.onMarkerClick = (spot) => {
+            if (this.auth.isGuest()) {
+                this.ui.showNotification('Log in om te beoordelen', 'error');
                 return;
             }
             const currentUserRating = spot.getUserRating();
-            this.#ui.openSpotModal(spot, currentUserRating, (rating) => {
+            this.ui.openSpotModal(spot, currentUserRating, (rating) => {
                 // rating toevoegen
-                spot.addRating(rating, this.#auth.getCurrentUser());
-                this.#storage.saveSpots(this.#spots);
-                this.#refreshMarkers();
-                this.#ui.closeSpotModal();
-                this.#ui.showNotification('Beoordeling opgeslagen');
-                this.#updateProfileUI();
+                spot.addRating(rating, this.auth.getCurrentUser());
+                this.storage.saveSpots(this.spots);
+                this.refreshMarkers();
+                this.ui.closeSpotModal();
+                this.ui.showNotification('Beoordeling opgeslagen');
+                this.updateProfileUI();
             });
         };
         // Bind marker clicks via Leaflet's popupopen event
-        this.#mapManager.getMap().on('popupopen', (e) => {
+        this.mapManager.getMap().on('popupopen', (e) => {
             const marker = e.popup._source;
-            const spot = this.#spots.find(s => s.getId() === marker.spotId);
-            if (spot) this.#mapManager.onMarkerClick(spot);
+            const spot = this.spots.find(s => s.getId() === marker.spotId);
+            if (spot) this.mapManager.onMarkerClick(spot);
         });
         // Logout
-        this.#ui.logoutBtn.onclick = () => {
-            this.#auth.logout();
-            this.#ui.setLoggedOut();
-            this.#ui.showAddHint(false);
-            this.#ui.showNotification('Uitgelogd');
-            this.#refreshMarkers();
-            this.#updateProfileUI();
+        this.ui.logoutBtn.addEventListener('click', () => {
+            this.auth.logout();
+            this.ui.setLoggedOut();
+            this.ui.showAddHint(false);
+            this.ui.showNotification('Uitgelogd');
+            this.refreshMarkers();
+            this.updateProfileUI();
             // Toon login modal
-            this.#showLoginModal();
-        };
+            this.showLoginModal();
+        });
         // Features CTA
         const cta = document.getElementById('featuresCtaBtn');
-        if (cta) cta.onclick = () => this.#ui.switchView('map');
+        if (cta) cta.addEventListener('click', () => this.ui.switchView('map'));
     }
 
-    #updateProfileUI() {
-        const currentUser = this.#auth.getCurrentUser();
-        const userSpots = this.#spots.filter(spot => spot.getAddedBy() === currentUser);
+    updateProfileUI() {
+        const currentUser = this.auth.getCurrentUser();
+        const userSpots = this.spots.filter(spot => spot.getAddedBy() === currentUser);
         let userRatingsCount = 0;
-        for (let i = 0; i < this.#spots.length; i++) {
-            if (this.#spots[i].getUserRating() !== null) userRatingsCount++;
+        for (let i = 0; i < this.spots.length; i++) {
+            if (this.spots[i].getUserRating() !== null) userRatingsCount++;
         }
-        this.#ui.updateProfileUI(currentUser, userSpots, userRatingsCount);
+        this.ui.updateProfileUI(currentUser, userSpots, userRatingsCount);
     }
 }
 

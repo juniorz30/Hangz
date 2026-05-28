@@ -15,6 +15,7 @@ export class UIManager {
         this.globalSearchInput = document.getElementById('globalSearchInput');
         this.navLinks = document.querySelectorAll('.nav-link');
         this.tourBtn = document.getElementById('tourBtn');
+        this.mySpotsBtn = document.getElementById('mySpotsBtn');
         this.views = document.querySelectorAll('.view');
         this.filterBtns = document.querySelectorAll('.filter-btn');
         this.userNameSpan = document.getElementById('userNameDisplay');
@@ -25,8 +26,10 @@ export class UIManager {
         this.panels = {
             tutorial: document.getElementById('tutorialPanel'),
             about: document.getElementById('aboutPanel'),
-            addspot: document.getElementById('addSpotPanel')
+            addspot: document.getElementById('addSpotPanel'),
+            myspots: document.getElementById('mySpotsPanel')
         };
+        this.mySpotsListPanel = document.getElementById('mySpotsListPanel');
         this.closePanelBtns = document.querySelectorAll('.closePanelBtn');
         // add spot form
         this.addSpotForm = document.getElementById('addSpotForm');
@@ -261,7 +264,7 @@ export class UIManager {
     }
 
     setLoggedInUser(username) {
-        this.userNameSpan.textContent = username;
+        this.userNameSpan.textContent = `Hey, ${username}`;
         this.logoutBtn.style.display = 'inline-block';
         // Toon "Locatie toevoegen" in sidebar als je ingelogd bent
         if (this.addSpotSidebarLink) {

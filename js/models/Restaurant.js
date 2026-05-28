@@ -2,14 +2,12 @@
 import { Spot } from './Spot.js';
 
 export class Restaurant extends Spot {
-    #cuisineType;
-
     constructor(id, name, description, lat, lng, addedBy, ratings, userRating, cuisineType = 'onbekend') {
         super(id, name, 'restaurant', description, lat, lng, addedBy, ratings, userRating);
-        this.#cuisineType = cuisineType;
+        this.cuisineType = cuisineType;
     }
 
-    getCuisineType() { return this.#cuisineType; }
+    getCuisineType() { return this.cuisineType; }
 
     toJSON() {
         return {
@@ -23,7 +21,7 @@ export class Restaurant extends Spot {
             addedBy: this.getAddedBy(),
             ratings: this.getRatings(),
             userRating: this.getUserRating(),
-            cuisineType: this.#cuisineType
+            cuisineType: this.cuisineType
         };
     }
 }
