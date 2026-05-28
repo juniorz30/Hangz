@@ -81,8 +81,7 @@ class HangzApp {
     }
 
     refreshMarkers() {
-        const searchValue = document.getElementById('globalSearchInput').value;
-        this.mapManager.renderMarkers(this.spots, this.currentFilter, searchValue);
+        this.mapManager.renderMarkers(this.spots, this.currentFilter);
     }
 
     setupEventListeners() {
@@ -90,14 +89,7 @@ class HangzApp {
         this.ui.menuBtn.addEventListener('click', () => this.ui.openSidebar());
         this.ui.closeSidebarBtn.addEventListener('click', () => this.ui.closeSidebar());
         this.ui.overlay.addEventListener('click', () => this.ui.closeSidebar());
-        // Search
-        this.ui.searchToggle.addEventListener('click', () => this.ui.openSearchBar());
-        this.ui.clearSearchBtn.addEventListener('click', () => {
-            document.getElementById('globalSearchInput').value = '';
-            this.ui.closeSearchBar();
-            this.refreshMarkers();
-        });
-        this.ui.globalSearchInput.addEventListener('input', () => this.refreshMarkers());
+
         // Filter buttons
         this.ui.filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {

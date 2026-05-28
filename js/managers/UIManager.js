@@ -9,10 +9,7 @@ export class UIManager {
         this.overlay = document.getElementById('overlay');
         this.menuBtn = document.getElementById('menuToggle');
         this.closeSidebarBtn = document.getElementById('closeSidebarBtn');
-        this.searchBar = document.getElementById('searchBar');
-        this.searchToggle = document.getElementById('searchToggleBtn');
-        this.clearSearchBtn = document.getElementById('clearSearchBtn');
-        this.globalSearchInput = document.getElementById('globalSearchInput');
+
         this.navLinks = document.querySelectorAll('.nav-link');
         this.tourBtn = document.getElementById('tourBtn');
         this.mySpotsBtn = document.getElementById('mySpotsBtn');

@@ -34,16 +34,12 @@ export class MapManager {
     }
 
     // Teken markers op basis van een array van Spot objecten
-    renderMarkers(spots, currentFilter, searchQuery = '') {
+    renderMarkers(spots, currentFilter) {
         this.clearMarkers();
         // filteren
         let filtered = spots;
         if (currentFilter !== 'all') {
             filtered = filtered.filter(spot => spot.getCategory() === currentFilter);
-        }
-        if (searchQuery !== '') {
-            const q = searchQuery.toLowerCase();
-            filtered = filtered.filter(spot => spot.getName().toLowerCase().includes(q));
         }
         // markers toevoegen
         for (let i = 0; i < filtered.length; i++) {
