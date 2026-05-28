@@ -201,25 +201,22 @@ export class UIManager {
         // Toon sterren voor gemiddelde rating
         let starsHtml = '';
         for (let i = 1; i <= 5; i++) {
-            if (i <= Math.round(avg)) starsHtml += '<span style="color:#ff7b2c;" data-lucide="star"></span>';
-            else starsHtml += '<span style="color:#aaa; opacity:0.5;" data-lucide="star"></span>';
+            if (i <= Math.round(avg)) starsHtml += '<span style="color:#ff7b2c; font-size: 20px; cursor: pointer;">★</span>';
+            else starsHtml += '<span style="color:#aaa; font-size: 20px; cursor: pointer; opacity: 0.4;">★</span>';
         }
         this.modalStarsDisplay.innerHTML = starsHtml;
         
-        // Vernieuw de stervoren voor gebruiker rating input (clone node)
-        const newStarInput = this.starRatingInput.cloneNode(true);
-        this.starRatingInput.parentNode.replaceChild(newStarInput, this.starRatingInput);
-        this.starRatingInput = newStarInput;
-        
-        // Update Lucide icons
-        if (window.lucide && window.lucide.createIcons) {
-            window.lucide.createIcons();
+        // Vernieuw de sterren voor gebruiker rating input
+        let userStarsHtml = '';
+        for (let i = 1; i <= 5; i++) {
+            const filled = currentUserRating && i <= currentUserRating;
+            userStarsHtml += `<span data-val="${i}" style="font-size: 24px; cursor: pointer; color: ${filled ? '#ff7b2c' : '#aaa'}; opacity: ${filled ? '1' : '0.4'}; transition: all 0.1s;">★</span>`;
         }
+        this.starRatingInput.innerHTML = userStarsHtml;
         
         // Event listeners voor rating sterren
-        const starsNew = this.starRatingInput.querySelectorAll('[data-lucide="star"]');
+        const starsNew = this.starRatingInput.querySelectorAll('span');
         starsNew.forEach(star => {
-            star.style.cursor = 'pointer';
             star.addEventListener('click', (e) => {
                 const rating = parseInt(star.getAttribute('data-val'));
                 onRatingCallback(rating);
@@ -233,7 +230,7 @@ export class UIManager {
                         s.style.opacity = '1';
                     } else {
                         s.style.color = '#aaa';
-                        s.style.opacity = '0.5';
+                        s.style.opacity = '0.4';
                     }
                 });
             });
@@ -245,16 +242,11 @@ export class UIManager {
                         s.style.opacity = '1';
                     } else {
                         s.style.color = '#aaa';
-                        s.style.opacity = '0.5';
+                        s.style.opacity = '0.4';
                     }
                 });
             });
         });
-        
-        // Zorg ervoor dat Lucide icons worden gerendered
-        if (window.lucide && window.lucide.createIcons) {
-            window.lucide.createIcons();
-        }
         
         this.spotModal.classList.add('open');
     }
