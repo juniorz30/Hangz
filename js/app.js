@@ -119,7 +119,7 @@ class HangzApp {
                 } else if (view === 'profile') {
                     this.updateProfileUI();
                 }
-            };
+            });
         });
         // Tour button
         if (this.ui.tourBtn) {
