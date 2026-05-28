@@ -197,30 +197,29 @@ export class UIManager {
         this.modalAddedBy.textContent = spot.getAddedBy();
         const avg = spot.getAverageRating();
         this.modalRatingText.textContent = `${avg.toFixed(1)} (${spot.getRatings().length} beoordelingen)`;
-        // toon sterren
+        
+        // Toon sterren voor gemiddelde rating
         let starsHtml = '';
         for (let i = 1; i <= 5; i++) {
-            if (i <= Math.round(avg)) starsHtml += '<i class="fas fa-star" style="color:#ff7b2c;"></i>';
-            else starsHtml += '<i class="far fa-star" style="color:#aaa;"></i>';
+            if (i <= Math.round(avg)) starsHtml += '<span style="color:#ff7b2c;" data-lucide="star"></span>';
+            else starsHtml += '<span style="color:#aaa; opacity:0.5;" data-lucide="star"></span>';
         }
         this.modalStarsDisplay.innerHTML = starsHtml;
-        // rating input
-        const stars = this.starRatingInput.querySelectorAll('i');
-        stars.forEach(star => {
-            star.classList.remove('fas', 'far');
-            star.classList.add('far');
-            const val = parseInt(star.getAttribute('data-val'));
-            if (currentUserRating && val <= currentUserRating) {
-                star.classList.remove('far');
-                star.classList.add('fas');
-            }
-        });
-        // event listeners voor sterren (eenmalig, maar we vervangen ze elke keer)
+        
+        // Vernieuw de stervoren voor gebruiker rating input (clone node)
         const newStarInput = this.starRatingInput.cloneNode(true);
         this.starRatingInput.parentNode.replaceChild(newStarInput, this.starRatingInput);
         this.starRatingInput = newStarInput;
-        const starsNew = this.starRatingInput.querySelectorAll('i');
+        
+        // Update Lucide icons
+        if (window.lucide && window.lucide.createIcons) {
+            window.lucide.createIcons();
+        }
+        
+        // Event listeners voor rating sterren
+        const starsNew = this.starRatingInput.querySelectorAll('[data-lucide="star"]');
         starsNew.forEach(star => {
+            star.style.cursor = 'pointer';
             star.addEventListener('click', (e) => {
                 const rating = parseInt(star.getAttribute('data-val'));
                 onRatingCallback(rating);
@@ -230,11 +229,11 @@ export class UIManager {
                 starsNew.forEach(s => {
                     const sv = parseInt(s.getAttribute('data-val'));
                     if (sv <= val) {
-                        s.classList.remove('far');
-                        s.classList.add('fas');
+                        s.style.color = '#ff7b2c';
+                        s.style.opacity = '1';
                     } else {
-                        s.classList.remove('fas');
-                        s.classList.add('far');
+                        s.style.color = '#aaa';
+                        s.style.opacity = '0.5';
                     }
                 });
             });
@@ -242,15 +241,21 @@ export class UIManager {
                 starsNew.forEach(s => {
                     const sv = parseInt(s.getAttribute('data-val'));
                     if (currentUserRating && sv <= currentUserRating) {
-                        s.classList.remove('far');
-                        s.classList.add('fas');
+                        s.style.color = '#ff7b2c';
+                        s.style.opacity = '1';
                     } else {
-                        s.classList.remove('fas');
-                        s.classList.add('far');
+                        s.style.color = '#aaa';
+                        s.style.opacity = '0.5';
                     }
                 });
             });
         });
+        
+        // Zorg ervoor dat Lucide icons worden gerendered
+        if (window.lucide && window.lucide.createIcons) {
+            window.lucide.createIcons();
+        }
+        
         this.spotModal.classList.add('open');
     }
 

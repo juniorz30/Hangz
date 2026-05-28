@@ -244,6 +244,22 @@ class HangzApp {
         }
         this.ui.updateProfileUI(currentUser, userSpots, userRatingsCount);
     }
+
+    updateMySpotsPanel() {
+        const currentUser = this.auth.getCurrentUser();
+        const userSpots = this.spots.filter(spot => spot.getAddedBy() === currentUser);
+        if (userSpots.length === 0) {
+            this.ui.mySpotsListPanel.innerHTML = '<p class="empty">Nog geen spots toegevoegd</p>';
+        } else {
+            const html = userSpots.map(spot => `
+                <div class="user-spot-item">
+                    <span><span data-lucide="map-pin"></span> ${spot.getName()}</span>
+                    <span>⭐ ${spot.getAverageRating().toFixed(1)}</span>
+                </div>
+            `).join('');
+            this.ui.mySpotsListPanel.innerHTML = html;
+        }
+    }
 }
 
 // Start de app zodra DOM geladen is
