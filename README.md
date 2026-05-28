@@ -18,6 +18,7 @@ Hangz is een interactieve webapplicatie waarmee je snel en eenvoudig leuke hangs
 - Gebruikersprofiel – Stel een gebruikersnaam in en bekijk je eigen toegevoegde spots.
 - Lokale opslag – Spots en gebruikersnaam worden opgeslagen in `localStorage` (later vervangen door Supabase).
 - Responsive design – Werkt op desktop, tablet en mobiel.
+- mogelijke toevoeging - je eigen locaties zien op de site.
 
  🛠️ Gebruikte technologieën
 
@@ -25,5 +26,5 @@ Hangz is een interactieve webapplicatie waarmee je snel en eenvoudig leuke hangs
 - CSS – Moderne styling met variabelen, flexbox, grid en animaties
 - JavaScript – Volledige functionaliteit, modulaire opzet
 - Leaflet – Interactieve kaart met OpenStreetMap
-- Font Awesome – Iconen
+- Font – lucide Iconen
 - Supabase (in de toekomst) – Backend en database
