@@ -260,3 +260,19 @@ document.addEventListener('DOMContentLoaded', () => {
     window.app.init();
     console.log(window.app);
 });
+
+const sb = window.supabase.createClient(
+  window.SUPABASE_URL,
+  window.SUPABASE_PUBLISHABLE_KEY,
+  { auth: {
+      persistSession: true, 
+      autoRefreshToken: true, 
+      detectSessionInUrl: false
+  } }
+);
+window.sb = sb;
+
+await sb.auth.signUp({ email, password }); 
+await sb.auth.signInWithPassword({ email, password }); 
+await sb.auth.signOut();
+const { data: { session } } = await sb.auth.getSession()

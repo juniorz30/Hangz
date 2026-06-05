@@ -720,6 +720,36 @@ body {
     margin-top: 12px !important;
 }
 
+/* ===== UTILITY CLASSES ===== */
+.hidden {
+    display: none;
+}
+
+.logo-tagline {
+    font-size: 0.7em;
+    margin-left: 8px;
+    color: var(--accent);
+    font-weight: 500;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+#addSpotForm select {
+    width: 100%;
+}
+
+.star-input {
+    display: flex;
+    gap: 6px;
+    font-size: 24px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .header-nav span { display: none; }

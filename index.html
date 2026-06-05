@@ -15,6 +15,9 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="config.js"></script>
 </head>
 <body>
 
@@ -35,8 +38,8 @@
     <!-- Header -->
     <header class="header">
         <div class="header-left">
-            <button id="menuToggle" class="icon-btn menu-icon"><span data-lucide="menu"></span></button>
-            <div class="logo"><span data-lucide="map-pin"></span><span>Hangz</span><small style="font-size: 0.7em; margin-left: 8px; color: #ff7b2c; font-weight: 500;">Find the spot. Skip the stress.</small></div>
+            <button id="menuToggle" class="icon-btn menu-icon" title="Menu openen"><span data-lucide="menu"></span></button>
+            <div class="logo"><span data-lucide="map-pin"></span><span>Hangz</span><small class="logo-tagline">Find the spot. Skip the stress.</small></div>
         </div>
         <nav class="header-nav">
             <a href="#" data-view="map" class="nav-link active"><span data-lucide="map"></span><span>Kaart</span></a>
@@ -45,7 +48,7 @@
         </nav>
         <div class="header-right">
             <span id="userNameDisplay" class="user-name">Gast</span>
-            <button id="logoutHeaderBtn" class="icon-btn logout-icon" style="display: none;"><span data-lucide="log-out"></span></button>
+            <button id="logoutHeaderBtn" class="icon-btn logout-icon hidden" title="Uitloggen"><span data-lucide="log-out"></span></button>
         </div>
     </header>
 
@@ -55,7 +58,7 @@
     <aside id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <div class="logo"><span data-lucide="map-pin"></span><span>Hangz</span></div>
-            <button id="closeSidebarBtn" class="close-btn"><span data-lucide="x"></span></button>
+            <button id="closeSidebarBtn" class="close-btn" title="Sluit menu"><span data-lucide="x"></span></button>
         </div>
         <nav class="sidebar-nav">
             <a href="#" data-panel="addspot" class="sidebar-link" id="addSpotSidebarLink">
@@ -130,11 +133,11 @@
                 <div class="profile-avatar-big"><span data-lucide="user"></span></div>
                 <h2>Jouw profiel</h2>
                 <div class="profile-card status-card">
-                    <div id="guestStatusBox" style="display: none;">
+                    <div id="guestStatusBox" class="hidden">
                         <p><strong>Je bent gast</strong></p>
                         <p class="small-text">Log in om je eigen spots op te slaan.</p>
                     </div>
-                    <div id="userStatusBox" style="display: none;">
+                    <div id="userStatusBox" class="hidden">
                         <p><strong>Gebruiker:</strong> <span id="profileUserEmail">-</span></p>
                         <p class="small-text">Je kunt spots toevoegen en beoordelen.</p>
                     </div>
@@ -168,7 +171,7 @@
     <!-- Panels (schuiven van rechts) -->
     <!-- Panels -->
     <div id="mySpotsPanel" class="slide-panel">
-        <div class="panel-header"><h3>Mijn Spots</h3><button class="closePanelBtn"><span data-lucide="x"></span></button></div>
+        <div class="panel-header"><h3>Mijn Spots</h3><button class="closePanelBtn" title="Sluit paneel"><span data-lucide="x"></span></button></div>
         <div class="panel-body">
             <div id="mySpotsListPanel" class="user-spots-list">
                 <p class="empty">Nog geen spots toegevoegd</p>
@@ -176,7 +179,7 @@
         </div>
     </div>
     <div id="tutorialPanel" class="slide-panel">
-        <div class="panel-header"><h3>Tutorial</h3><button class="closePanelBtn"><span data-lucide="x"></span></button></div>
+        <div class="panel-header"><h3>Tutorial</h3><button class="closePanelBtn" title="Sluit paneel"><span data-lucide="x"></span></button></div>
         <div class="panel-body">
             <p><strong>1.</strong> Bekijk de kaart – alle spots zijn zichtbaar.</p>
             <p><strong>2.</strong> Gebruik de filterbalk om categorieën te selecteren.</p>
@@ -186,20 +189,21 @@
         </div>
     </div>
     <div id="aboutPanel" class="slide-panel">
-        <div class="panel-header"><h3>Over Hangz</h3><button class="closePanelBtn"><span data-lucide="x"></span></button></div>
+        <div class="panel-header"><h3>Over Hangz</h3><button class="closePanelBtn" title="Sluit paneel"><span data-lucide="x"></span></button></div>
         <div class="panel-body">
             <p>Hangz is een schoolproject voor Informatica.</p>
             <p>Doel: een gebruiksvriendelijke kaart voor hangspots in Willebroek, Puurs en Mechelen.</p>
             <p>Technologie: HTML/CSS/JS, Leaflet, OOP, localStorage.</p>
-            <p>Gemaakt door: [Jouw Naam]</p>
+            <p>Gemaakt door: Emmanuel Vincent </p>
         </div>
     </div>
     <div id="addSpotPanel" class="slide-panel">
-        <div class="panel-header"><h3>Nieuwe spot</h3><button class="closePanelBtn"><span data-lucide="x"></span></button></div>
+        <div class="panel-header"><h3>Nieuwe spot</h3><button class="closePanelBtn" title="Sluit paneel"><span data-lucide="x"></span></button></div>
         <div class="panel-body">
             <form id="addSpotForm">
                 <input type="text" id="spotName" placeholder="Naam *" required>
-                <select id="spotCategory">
+                <label for="spotCategory" class="form-label">Categorie *</label>
+                <select id="spotCategory" aria-label="Categorie selecteren">
                     <option value="">-- Kies een categorie --</option>
                     <option value="park">Park</option>
                     <option value="gym">Gym</option>
@@ -208,7 +212,7 @@
                     <option value="muziekschool">Muziekschool</option>
                     <option value="pedicure">Pedicure</option>
                 </select>
-                <input type="text" id="spotCustomCategory" placeholder="Eigen categorie" style="display: none;">
+                <input type="text" id="spotCustomCategory" placeholder="Eigen categorie" class="hidden">
                 <textarea id="spotDesc" placeholder="Beschrijving (optioneel)"></textarea>
                 <div class="location-preview"><span data-lucide="map-pin"></span> <span id="selectedCoords">Nog geen locatie gekozen</span></div>
                 <div class="form-buttons">
@@ -224,7 +228,7 @@
         <div class="modal-card">
             <div class="modal-header">
                 <span id="modalCategoryBadge" class="category-badge">Park</span>
-                <button id="closeModalBtn" class="modal-close"><span data-lucide="x"></span></button>
+                <button id="closeModalBtn" class="modal-close" title="Sluit dialoog"><span data-lucide="x"></span></button>
             </div>
             <div class="modal-body">
                 <h2 id="modalSpotName">Spot naam</h2>
@@ -235,7 +239,7 @@
                     <p id="modalRatingText"></p>
                     <div class="your-rating">
                         <p>Jouw score:</p>
-                        <div id="starRatingInput" class="star-input" style="display: flex; gap: 6px; font-size: 24px;"></div>
+                        <div id="starRatingInput" class="star-input"></div>
                     </div>
                 </div>
                 <p><span data-lucide="user"></span> Toegevoegd door: <span id="modalAddedBy"></span></p>

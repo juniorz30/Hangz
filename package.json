@@ -1,0 +1,24 @@
+{
+  "name": "hangz",
+  "version": "1.0.0",
+  "description": "Hangz - find the spot, skip the stress",
+  "main": "claude.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juniorz30/Hangz.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/juniorz30/Hangz/issues"
+  },
+  "homepage": "https://github.com/juniorz30/Hangz#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.107.0"
+  }
+}
