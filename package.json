@@ -4,7 +4,9 @@
   "description": "Hangz - find the spot, skip the stress",
   "main": "claude.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
@@ -13,12 +15,15 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/juniorz30/Hangz/issues"
   },
   "homepage": "https://github.com/juniorz30/Hangz#readme",
   "dependencies": {
     "@supabase/supabase-js": "^2.107.0"
+  },
+  "devDependencies": {
+    "vite": "^8.0.16"
   }
 }

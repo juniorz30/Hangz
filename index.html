@@ -15,9 +15,6 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-    <script src="config.js"></script>
 </head>
 <body>
 
@@ -26,10 +23,13 @@
         <div class="login-card">
             <div class="login-icon" data-lucide="map-pin"></div>
             <h2>Welkom bij Hangz</h2>
-            <p>Kies een gebruikersnaam om spots toe te voegen en te beoordelen</p>
-            <input type="text" id="loginUsername" placeholder="Gebruikersnaam">
+            <p>Maak een account of log in om spots toe te voegen en te beoordelen</p>
+            <input type="email" id="loginEmail" placeholder="E-mail" autocomplete="email">
+            <input type="password" id="loginPassword" placeholder="Wachtwoord" autocomplete="current-password">
+            <div id="loginError" class="login-error" style="display:none; color:#c00;"></div>
             <div class="login-buttons">
-                <button id="doRegisterBtn" class="btn-primary">Doorgaan</button>
+                <button id="doLoginBtn" class="btn-primary">Log in</button>
+                <button id="doRegisterBtn" class="btn-secondary">Account maken</button>
                 <button id="guestLoginBtn" class="btn-text">Verder als gast (alleen kijken)</button>
             </div>
         </div>

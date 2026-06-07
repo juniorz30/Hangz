@@ -17,18 +17,22 @@ class HangzApp {
         this.selectedLocation = null;
     }
 
-    init() {
+    async init() {
         // Data laden
         this.spots = this.storage.loadSpots();
+        
+        // Herstel sessie van Supabase, NIEUW: wacht op Supabase voor je over de UI-state beslist
+        await this.auth.restoreSession();
+        
         // Check login status
-        const isLoggedIn = this.auth.isLoggedIn();
-        if (!isLoggedIn) {
-            this.ui.setLoggedOut();
-            this.showLoginModal();
-        } else {
+        if (this.auth.isLoggedIn()) {
             this.ui.setLoggedInUser(this.auth.getCurrentUser());
             this.ui.showAddHint(true);
+        } else {
+            this.ui.setLoggedOut();
+            this.showLoginModal();
         }
+        
         // Kaart initialiseren
         this.mapManager.init(51.05, 4.38, 12);
         this.refreshMarkers();
@@ -38,46 +42,68 @@ class HangzApp {
         this.ui.switchView('map');
         // Update UI voor profiel later
         this.updateProfileUI();
+
+        // Reageer op auth-wijzigingen van overal (andere tabs, token-expiry, enz.)
+        this.auth.onChange(() => {
+            if (this.auth.isLoggedIn()) {
+                this.ui.setLoggedInUser(this.auth.getCurrentUser());
+                this.ui.showAddHint(true);
+            } else if (!this.auth.isGuestMode) {
+                this.ui.setLoggedOut();
+                this.showLoginModal();
+            }
+            this.refreshMarkers();
+            this.updateProfileUI();
+        });
     }
 
     showLoginModal() {
-        const loginOverlay = document.getElementById('loginOverlay');
-        const doRegister = document.getElementById('doRegisterBtn');
-        const guest = document.getElementById('guestLoginBtn');
-        const usernameInput = document.getElementById('loginUsername');
+        const overlay = document.getElementById('loginOverlay');
+        const loginBtn = document.getElementById('doLoginBtn');
+        const registerBtn = document.getElementById('doRegisterBtn');
+        const guestBtn = document.getElementById('guestLoginBtn');
+        const emailInput = document.getElementById('loginEmail');
+        const passwordInput = document.getElementById('loginPassword');
+        const errorBox = document.getElementById('loginError');
 
-        if (!loginOverlay || !doRegister || !guest) {
-            console.error('Login elements not found!');
-            return;
-        }
+        const showError = (msg) => { errorBox.textContent = msg; errorBox.style.display = 'block'; };
+        const clearError = () => { errorBox.textContent = ''; errorBox.style.display = 'none'; };
 
-        // DOORGAAN (registreren) BUTTON
-        doRegister.addEventListener('click', () => {
-            const user = usernameInput.value.trim();
-            if (!user) {
-                alert('Voer een gebruikersnaam in');
-                return;
+        loginBtn.onclick = async () => {
+            clearError();
+            try {
+                await this.auth.login(emailInput.value.trim(), passwordInput.value);
+                overlay.style.display = 'none';
+                // onAuthStateChange werkt de rest van de UI bij.
+            } catch (err) {
+                showError(err.message || 'Inloggen mislukt');
             }
-            if (this.auth.register(user, '')) {
-                this.ui.setLoggedInUser(user);
-                this.ui.showAddHint(true);
-                loginOverlay.style.display = 'none';
-                this.updateProfileUI();
-            } else {
-                alert('Registratie mislukt');
-            }
-        });
+        };
 
-        // GAST BUTTON
-        guest.addEventListener('click', () => {
-            this.auth.login('Gast', '');
+        registerBtn.onclick = async () => {
+            clearError();
+            try {
+                const { session } = await this.auth.register(emailInput.value.trim(), passwordInput.value);
+                if (!session) {
+                    showError('Account aangemaakt — controleer je e-mail om te bevestigen.');
+                } else {
+                    overlay.style.display = 'none';
+                }
+            } catch (err) {
+                showError(err.message || 'Registratie mislukt');
+            }
+        };
+
+        guestBtn.onclick = () => {
+            this.auth.loginAsGuest();
             this.ui.setLoggedInUser('Gast');
             this.ui.showAddHint(false);
-            loginOverlay.style.display = 'none';
+            overlay.style.display = 'none';
             this.updateProfileUI();
-        });
+        };
 
-        loginOverlay.style.display = 'flex';
+        overlay.style.display = 'flex';
+    }
     }
 
     refreshMarkers() {
@@ -212,15 +238,16 @@ class HangzApp {
             if (spot) this.mapManager.onMarkerClick(spot);
         });
         // Logout
-        this.ui.logoutBtn.addEventListener('click', () => {
-            this.auth.logout();
-            this.ui.setLoggedOut();
-            this.ui.showAddHint(false);
-            this.ui.showNotification('Uitgelogd');
-            this.refreshMarkers();
-            this.updateProfileUI();
-            // Toon login modal
-            this.showLoginModal();
+        this.ui.logoutBtn.addEventListener('click', async () 
+        => {
+            try {
+                await this.auth.logout();
+                this.ui.showNotification('Uitgelogd');
+                // setLoggedOut / refreshMarkers / showLoginModal gebeuren automatisch
+                // via de onChange-subscription die in init() is opgezet.
+            } catch (err) {
+                this.ui.showNotification(err.message || 'Uitloggen mislukt', 'error');
+            }
         });
         // Features CTA
         const cta = document.getElementById('featuresCtaBtn');
@@ -251,26 +278,16 @@ class HangzApp {
             `).join('');
             this.ui.mySpotsListPanel.innerHTML = html;
         }
-    }
 }
 
 // Start de app zodra DOM geladen is
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new HangzApp();
-    window.app.init();
-    console.log(window.app);
+    window.app.init().catch(err => {
+        console.error('App kon niet starten:', err);
+        alert('Er ging iets mis bij het opstarten van de app. Check de console.');
+    });
 });
-
-const sb = window.supabase.createClient(
-  window.SUPABASE_URL,
-  window.SUPABASE_PUBLISHABLE_KEY,
-  { auth: {
-      persistSession: true, 
-      autoRefreshToken: true, 
-      detectSessionInUrl: false
-  } }
-);
-window.sb = sb;
 
 await sb.auth.signUp({ email, password }); 
 await sb.auth.signInWithPassword({ email, password }); 
