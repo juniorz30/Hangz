@@ -103,7 +103,6 @@ class HangzApp {
 
         overlay.style.display = 'flex';
     }
-    }
 
     refreshMarkers() {
         this.mapManager.renderMarkers(this.spots, this.currentFilter);
@@ -111,7 +110,7 @@ class HangzApp {
 
     setupEventListeners() {
         // Sidebar
-        this.ui.menuBtn.addEventListener('click', () => this.ui.openSidebar());
+        this.ui.menuBtn.addEventListener('click', () => this.ui.toggleSidebar());
         this.ui.closeSidebarBtn.addEventListener('click', () => this.ui.closeSidebar());
         this.ui.overlay.addEventListener('click', () => this.ui.closeSidebar());
 
@@ -178,7 +177,7 @@ class HangzApp {
             this.ui.showAddHint(false);
         });
         // Add spot form submit
-        this.ui.addSpotForm.addEventListener('submit', (e) => {
+        this.ui.addSpotForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!this.selectedLocation) {
                 this.ui.showNotification('Klik eerst op de kaart', 'error');
@@ -249,8 +248,7 @@ class HangzApp {
             if (spot) this.mapManager.onMarkerClick(spot);
         });
         // Logout
-        this.ui.logoutBtn.addEventListener('click', async () 
-        => {
+        this.ui.logoutBtn.addEventListener('click', async () => {
             try {
                 await this.auth.logout();
                 this.ui.showNotification('Uitgelogd');
@@ -267,7 +265,7 @@ class HangzApp {
 
     updateProfileUI() {
         const currentUser = this.auth.getCurrentUser();
-        const userSpots = this.spots.filter(spot => spot.getAddedBy() === currentUser);
+        const userSpots = this.spots.filter(spot => spot.getAddedBy() === this.auth.getUserId());
         let userRatingsCount = 0;
         for (let i = 0; i < this.spots.length; i++) {
             if (this.spots[i].getUserRating() !== null) userRatingsCount++;
@@ -277,7 +275,7 @@ class HangzApp {
 
     updateMySpotsPanel() {
         const currentUser = this.auth.getCurrentUser();
-        const userSpots = this.spots.filter(spot => spot.getAddedBy() === currentUser);
+        const userSpots = this.spots.filter(spot => spot.getAddedBy() === this.auth.getUserId());
         if (userSpots.length === 0) {
             this.ui.mySpotsListPanel.innerHTML = '<p class="empty">Nog geen spots toegevoegd</p>';
         } else {
@@ -289,6 +287,7 @@ class HangzApp {
             `).join('');
             this.ui.mySpotsListPanel.innerHTML = html;
         }
+    }
 }
 
 // Start de app zodra DOM geladen is
@@ -299,8 +298,3 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Er ging iets mis bij het opstarten van de app. Check de console.');
     });
 });
-
-await sb.auth.signUp({ email, password }); 
-await sb.auth.signInWithPassword({ email, password }); 
-await sb.auth.signOut();
-const { data: { session } } = await sb.auth.getSession()
