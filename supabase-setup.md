@@ -539,7 +539,7 @@ create index spots_added_by_idx on public.spots(added_by);
 create index ratings_spot_id_idx on public.ratings(spot_id);
 ```
 
-Controleer: in **Database → Tables** hoor je nu `spots` en `ratings` te zien staan met een open hangslot-icoontje (RLS staat nog uit — dat fixen we hierna).
+Controleer: in **Database → Tables** hoor je nu `spots` en `ratings` te zien staan met een open hangslot-icoontje (RLS staat nog uit — dat fixen we hierna).done
 
 ### 7b. Schakel Row Level Security in
 
@@ -589,7 +589,7 @@ create policy "Users can change their own rating"
     with check (auth.uid() = user_id);
 ```
 
-Draai daarna **Database → Advisors**. Er horen geen "RLS disabled"-waarschuwingen meer te zijn op `public.spots` of `public.ratings`.
+Draai daarna **Database → Advisors**. Er horen geen "RLS disabled"-waarschuwingen meer te zijn op `public.spots` of `public.ratings`. done
 
 ### 7c. Seed de default spots (eenmalig)
 
@@ -715,7 +715,7 @@ Je moet ook de **aanroepers** in `app.js` aanpassen, want `loadSpots` en `addSpo
 De model-classes (`Spot`, `Gym`, `Restaurant`) bestaan nog steeds — ze blijven nuttig voor `getAverageRating()` en vergelijkbaar gedrag. Alleen de persistentielaag verandert. De `getDefaultSpots()`-methode en `clearAllUserData()` kunnen verwijderd worden zodra je bevestigt dat er niks breekt.
 
 Let op: de spot-`id` was eerst een nummer en is nu een UUID-string — overal waar de code id's vergelijkt (bijv. `marker.spotId === spot.getId()`) blijft het werken omdat JS `===` gebruikt en beide kanten nu strings zijn.
-
+done
 ---
 
 ## Stap 8 — Test de flow van begin tot eind

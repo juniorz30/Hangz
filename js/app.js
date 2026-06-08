@@ -3,8 +3,6 @@ import { AuthManager } from './managers/AuthManager.js';
 import { StorageManager } from './managers/StorageManager.js';
 import { MapManager } from './managers/MapManager.js';
 import { UIManager } from './managers/UIManager.js';
-import { Spot } from './models/Spot.js';
-import { generateId } from './utils/helpers.js';
 
 class HangzApp {
     constructor() {
@@ -18,11 +16,11 @@ class HangzApp {
     }
 
     async init() {
-        // Data laden
-        this.spots = this.storage.loadSpots();
-        
         // Herstel sessie van Supabase, NIEUW: wacht op Supabase voor je over de UI-state beslist
         await this.auth.restoreSession();
+        
+        // Data laden
+        this.spots = await this.storage.loadSpots(this.auth.getUserId());
         
         // Check login status
         if (this.auth.isLoggedIn()) {
@@ -44,7 +42,8 @@ class HangzApp {
         this.updateProfileUI();
 
         // Reageer op auth-wijzigingen van overal (andere tabs, token-expiry, enz.)
-        this.auth.onChange(() => {
+        this.auth.onChange(async () => {
+            this.spots = await this.storage.loadSpots(this.auth.getUserId());
             if (this.auth.isLoggedIn()) {
                 this.ui.setLoggedInUser(this.auth.getCurrentUser());
                 this.ui.showAddHint(true);
@@ -199,16 +198,24 @@ class HangzApp {
                 this.ui.showNotification('Categorie is verplicht', 'error');
                 return;
             }
-            const newId = generateId();
-            const newSpot = new Spot(newId, name, category, description || 'Geen beschrijving', this.selectedLocation.lat, this.selectedLocation.lng, this.auth.getCurrentUser(), [], null);
-            this.spots.push(newSpot);
-            this.storage.saveSpots(this.spots);
-            this.refreshMarkers();
-            this.ui.closeAllPanels();
-            this.ui.resetAddSpotForm();
-            this.selectedLocation = null;
-            this.ui.showNotification('Spot toegevoegd!');
-            this.updateProfileUI();
+            try {
+                const newSpot = await this.storage.addSpot({
+                    name,
+                    category,
+                    description: description || 'Geen beschrijving',
+                    lat: this.selectedLocation.lat,
+                    lng: this.selectedLocation.lng
+                });
+                this.spots.push(newSpot);
+                this.refreshMarkers();
+                this.ui.closeAllPanels();
+                this.ui.resetAddSpotForm();
+                this.selectedLocation = null;
+                this.ui.showNotification('Spot toegevoegd!');
+                this.updateProfileUI();
+            } catch (err) {
+                this.ui.showNotification(err.message || 'Fout bij toevoegen', 'error');
+            }
         });
         this.ui.cancelAddBtn.addEventListener('click', () => {
             this.ui.closeAllPanels();
@@ -221,14 +228,18 @@ class HangzApp {
                 return;
             }
             const currentUserRating = spot.getUserRating();
-            this.ui.openSpotModal(spot, currentUserRating, (rating) => {
+            this.ui.openSpotModal(spot, currentUserRating, async (rating) => {
                 // rating toevoegen
-                spot.addRating(rating, this.auth.getCurrentUser());
-                this.storage.saveSpots(this.spots);
-                this.refreshMarkers();
-                this.ui.closeSpotModal();
-                this.ui.showNotification('Beoordeling opgeslagen');
-                this.updateProfileUI();
+                try {
+                    await this.storage.rateSpot(spot.getId(), rating);
+                    this.spots = await this.storage.loadSpots(this.auth.getUserId());
+                    this.refreshMarkers();
+                    this.ui.closeSpotModal();
+                    this.ui.showNotification('Beoordeling opgeslagen');
+                    this.updateProfileUI();
+                } catch (err) {
+                    this.ui.showNotification(err.message || 'Fout bij beoordeling', 'error');
+                }
             });
         };
         // Bind marker clicks via Leaflet's popupopen event
