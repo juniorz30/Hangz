@@ -26,6 +26,7 @@ class HangzApp {
         if (this.auth.isLoggedIn()) {
             this.ui.setLoggedInUser(this.auth.getCurrentUser());
             this.ui.showAddHint(true);
+            this.hideLoginModal();
         } else {
             this.ui.setLoggedOut();
             this.showLoginModal();
@@ -47,6 +48,7 @@ class HangzApp {
             if (this.auth.isLoggedIn()) {
                 this.ui.setLoggedInUser(this.auth.getCurrentUser());
                 this.ui.showAddHint(true);
+                this.hideLoginModal(); 
             } else if (!this.auth.isGuestMode) {
                 this.ui.setLoggedOut();
                 this.showLoginModal();
@@ -102,6 +104,11 @@ class HangzApp {
         };
 
         overlay.style.display = 'flex';
+    }
+
+    hideLoginModal() { 
+        const overlay = document.getElementById('loginOverlay');
+        overlay.style.display = 'none';
     }
 
     refreshMarkers() {
