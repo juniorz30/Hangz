@@ -1,4 +1,3 @@
-// models/Gym.js
 import { Spot } from './Spot.js';
 
 export class Gym extends Spot {

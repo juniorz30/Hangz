@@ -11,14 +11,12 @@ if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     auth: {
-        persistSession: true,       // bewaar de sessie in localStorage zodat refresh de gebruiker ingelogd houdt
-        autoRefreshToken: true,     // vernieuw de JWT stilletjes voordat hij verloopt
-        detectSessionInUrl: true,   // nodig voor OAuth + magic links
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
     },
 });
 
-// Stel beschikbaar op window tijdens development zodat je er vanuit de browser-console mee kunt spelen.
-// Verwijder dit (of beveilig het met een build-flag) voordat je naar productie gaat.
 if (import.meta.env.DEV) {
     window.supabase = supabase;
 }

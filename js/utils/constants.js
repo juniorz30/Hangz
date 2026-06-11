@@ -1,7 +1,3 @@
-// constants.js - Vaste waarden die op meerdere plekken gebruikt worden
-// Centrale plek zodat je niet dezelfde waarden 2× hoeft uit te typen
-
-// Iconen voor elke categorie (Font Awesome klassen)
 export const CATEGORY_ICONS = {
     park: 'fa-tree',
     gym: 'fa-dumbbell',
@@ -16,7 +12,6 @@ export const CATEGORY_ICONS = {
     koffie: 'fa-coffee'
 };
 
-// Kleuren voor elke categorie (hex waarden) - MOETEN OVEREENKOMEN MET CSS!
 export const CATEGORY_COLORS = {
     park: '#10b981',
     gym: '#3b82f6',
@@ -31,6 +26,5 @@ export const CATEGORY_COLORS = {
     koffie: '#c0392b'
 };
 
-// Default icoon/kleur als categorie onbekend is
 export const DEFAULT_ICON = 'fa-map-marker-alt';
 export const DEFAULT_COLOR = '#ff7b2c';

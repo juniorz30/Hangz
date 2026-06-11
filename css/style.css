@@ -647,6 +647,17 @@ body {
     color: white;
 }
 
+.login-error {
+    display: none;
+    color: #c00;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.login-error.show {
+    display: block;
+}
+
 .login-buttons {
     display: flex;
     flex-direction: column;

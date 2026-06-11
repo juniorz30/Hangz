@@ -1,4 +1,3 @@
-// models/Spot.js
 import { Location } from './Location.js';
 
 export class Spot extends Location {
@@ -13,7 +12,6 @@ export class Spot extends Location {
         this.userRating = userRating;
     }
 
-    // Getters
     getId() { return this.id; }
     getName() { return this.name; }
     getCategory() { return this.category; }
@@ -22,7 +20,6 @@ export class Spot extends Location {
     getRatings() { return this.ratings.slice(); }
     getUserRating() { return this.userRating; }
 
-    // Berekent gemiddelde van alle ratings
     getAverageRating() {
         if (this.ratings.length === 0) return 0;
         let sum = 0;
@@ -33,9 +30,7 @@ export class Spot extends Location {
         return sum / this.ratings.length;
     }
 
-    // Voeg rating toe (vervangt oude rating van dezelfde gebruiker)
     addRating(rating, username) {
-        // Verwijder oude rating van deze gebruiker en voeg nieuwe toe
         this.ratings = this.ratings.filter(r => r.user !== username);
         this.ratings.push({ value: rating, user: username });
         this.userRating = rating;
@@ -45,7 +40,6 @@ export class Spot extends Location {
         this.userRating = rating;
     }
 
-    // Converteer naar plain object met type-aanduiding
     toJSON() {
         return {
             type: 'Spot',

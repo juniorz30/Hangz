@@ -1,4 +1,3 @@
-// models/Restaurant.js
 import { Spot } from './Spot.js';
 
 export class Restaurant extends Spot {

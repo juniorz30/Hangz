@@ -4,8 +4,6 @@ import { Gym } from '../models/Gym.js';
 import { Restaurant } from '../models/Restaurant.js';
 
 export class StorageManager {
-    // Haal alle spots + hun beoordelingen op in één query.
-    // Geef currentUserId mee zodat we kunnen markeren welke beoordeling "van jou" is.
     async loadSpots(currentUserId) {
         const { data, error } = await supabase
             .from('spots')
@@ -17,8 +15,7 @@ export class StorageManager {
         return data.map(row => this._rowToModel(row, currentUserId));
     }
 
-    // Persisteer één nieuwe spot. Geef added_by niet mee — de DB-default `auth.uid()`
-    // vult het in, zodat de client niet kan liegen over wie het toevoegde.
+    // added_by wordt door Supabase zelf ingevuld via auth.uid().
     async addSpot({ name, category, description, lat, lng, extras = {} }) {
         const { data, error } = await supabase
             .from('spots')
@@ -29,7 +26,6 @@ export class StorageManager {
         return this._rowToModel(data, data.added_by);
     }
 
-    // Upsert een beoordeling. user_id krijgt als default auth.uid() vanuit de DB.
     async rateSpot(spotId, rating) {
         const { error } = await supabase
             .from('ratings')
@@ -42,9 +38,6 @@ export class StorageManager {
         const mine = (row.ratings || []).find(r => r.user_id === currentUserId);
         const userRating = mine ? mine.rating : null;
 
-        // We hebben geen "type"-kolom meer — de keuze van subclass wordt gestuurd
-        // door welke extras de rij heeft. Pas deze vertakking aan op welk signaal je
-        // ook gebruikt (bijv. een expliciete `type`-kolom als je dat liever hebt).
         if (row.category === 'gym') {
             return new Gym(
                 row.id, row.name, row.description,
@@ -68,8 +61,6 @@ export class StorageManager {
         );
     }
 
-    // No-ops nu — alleen behouden zodat bestaande call sites niet crashen.
-    // Verwijder de aanroepen in app.js / AuthManager en daarna deze methodes ook.
     saveSpots() {}
     clearAllUserData() {}
 }
